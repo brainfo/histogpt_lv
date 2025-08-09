@@ -1,0 +1,416 @@
+2025-07-09 12:11:43,790 - __main__ - INFO - Offline environment configured
+2025-07-09 12:11:43,795 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-09 12:11:43,796 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-09 12:11:43,797 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-09 12:11:43,869 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-09 12:11:43,871 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-09 12:11:43,871 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-09 12:11:43,877 - datasets.datasets - WARNING - Unknown diagnosis for file: 24526_23_iBCC_147.h5
+2025-07-09 12:11:43,877 - datasets.datasets - WARNING - Unknown diagnosis for file: 29766_23_iBCC_32.h5
+2025-07-09 12:11:43,877 - datasets.datasets - WARNING - Unknown diagnosis for file: 23508_23_iBCC_166.h5
+2025-07-09 12:11:43,877 - datasets.datasets - WARNING - Unknown diagnosis for file: 28439_23_iBCC_57.h5
+2025-07-09 12:11:43,877 - datasets.datasets - WARNING - Unknown diagnosis for file: 22661_23_iBCC_199.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 30837_23_iBCC_16.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 26693_23_iBCC_105.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 26532_23_iBCC_112.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 23790_23_iBCC_163.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 30713_23_iBCC_24.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 22817_23_iBCC_192.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 27715_23_iBCC_73.h5
+2025-07-09 12:11:43,878 - datasets.datasets - WARNING - Unknown diagnosis for file: 22875_23_iBCC_189.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 25961_23_iBCC_83.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 26956_23_iBCC_93.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 22578_23_iBCC_203.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 26520_23_iBCC_113.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 31435_23_iBCC_8.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 22922_23_iBCC_188.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 26517_23_iBCC_115.h5
+2025-07-09 12:11:43,879 - datasets.datasets - WARNING - Unknown diagnosis for file: 29166_23_iBCC_42.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 24229_23_iBCC_152.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 29400_23_iBCC_39.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 24545_23_iBCC_145.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 29425_23_iBCC_38.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 28834_23_iBCC_48.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 29531_23_iBCC_40.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 28815_23_iBCC_49.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 27138_23_iBCC_89.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 24856_23_iBCC_140.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 22556_23_iBCC_204.h5
+2025-07-09 12:11:43,880 - datasets.datasets - WARNING - Unknown diagnosis for file: 27802_23_iBCC_71.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 26160_23_iBCC_121.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 29692_23_iBCC_34.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 26935_23_iBCC_98.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 28485_23_iBCC_55.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 27461_23_iBCC_81.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 26669_23_iBCC_107.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 27336_23_iBCC_85.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 25513_23_iBCC_132.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 22737_23_iBCC_195.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 24602_23_iBCC_144.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 24245_23_iBCC_150.h5
+2025-07-09 12:11:43,881 - datasets.datasets - WARNING - Unknown diagnosis for file: 30718_23_iBCC_23.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 22916_23_iBCC_187.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 23295_23_iBCC_177.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 24053_23_iBCC_155.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 24627_23_iBCC_143.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 30889_23_iBCC_13.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 26821_23_iBCC_100.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 26902_23_iBCC_97.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 30300_23_iBCC_26.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 25650_23_iBCC_129.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 28179_23_iBCC_60.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 29214_23_iBCC_41.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 26121_23_iBCC_123.h5
+2025-07-09 12:11:43,882 - datasets.datasets - WARNING - Unknown diagnosis for file: 29498_23_iBCC_36.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 22999_23_iBCC_185.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 22667_23_iBCC_197.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 27568_23_iBCC_77.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 26438_23_iBCC_118.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 27387_23_iBCC_87.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 27868_23_iBCC_68.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 27981_23_iBCC_65.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 29902_23_iBCC_29.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 26436_23_iBCC_120.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 23693_23_iBCC_160.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 27679_23_iBCC_76.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 26906_23_iBCC_95.h5
+2025-07-09 12:11:43,883 - datasets.datasets - WARNING - Unknown diagnosis for file: 25796_23_iBCC_128.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 31200_23_iBCC_12.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 30687_23_iBCC_20.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 23385_23_iBCC_170.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 30081_23_iBCC_28.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 23309_23_iBCC_175.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 27463_23_iBCC_79.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 24785_23_iBCC_142.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 26994_23_iBCC_94.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 22831_23_iBCC_191.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 30865_23_iBCC_15.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 30498_23_iBCC_25.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 25086_23_iBCC_139.h5
+2025-07-09 12:11:43,884 - datasets.datasets - WARNING - Unknown diagnosis for file: 23367_23_iBCC_171.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 31354_23_iBCC_9.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 25624_23_iBCC_130.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 28008_23_iBCC_63.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 27699_23_iBCC_75.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 22534_23_iBCC_205.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 30872_23_iBCC_14.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 28358_23_iBCC_59.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 23066_23_iBCC_181.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 25538_23_iBCC_131.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 24447_23_iBCC_148.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 29453_23_iBCC_37.h5
+2025-07-09 12:11:43,885 - datasets.datasets - WARNING - Unknown diagnosis for file: 23828_23_iBCC_158.h5
+2025-07-09 12:11:43,885 - datasets.datasets - INFO - Loaded 156 samples from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal
+2025-07-09 12:11:43,908 - datasets.datasets - INFO - Class distribution: [99 57]
+2025-07-09 12:11:43,908 - __main__ - INFO - Dataset: 156 samples
+2025-07-09 12:11:43,908 - __main__ - INFO - Class distribution: [99 57]
+2025-07-09 12:11:46,687 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-09 12:11:48,193 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-09 12:14:36,143 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-09 12:15:02,606 - utils.pretrained_loader - ERROR - Failed to load pretrained weights: Error(s) in loading state_dict for HistoGPTForCausalLM:
+	Unexpected key(s) in state_dict: "histogpt.aggregator.position.pos_embed_x", "histogpt.aggregator.position.pos_embed_y", "histogpt.aggregator.position.pos_embed_z". 
+	size mismatch for histogpt.aggregator.head.weight: copying a param with shape torch.Size([167, 1536]) from checkpoint, the shape in current model is torch.Size([2, 1536]).
+2025-07-09 12:15:02,606 - utils.pretrained_loader - ERROR - Training from scratch...
+2025-07-09 12:15:02,972 - __main__ - WARNING - Failed to load pretrained weights, training from scratch
+2025-07-09 12:15:05,861 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/16075_23_sBBC_99.h5: invalid load key, '\x00'.
+2025-07-09 12:15:05,864 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/19762_23_sBBC_79.h5: invalid load key, '\x00'.
+2025-07-09 12:15:05,871 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/23046_23_sBBC_51.h5: invalid load key, '\x00'.
+2025-07-09 12:15:05,874 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/18094_23_sBBC_86.h5: invalid load key, '\x00'.
+2025-07-09 12:15:06,424 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/9264_23_sBBC_65.h5: invalid load key, '\x00'.
+2025-07-09 12:15:06,437 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/16537_22_PEK-G3_4-107.h5: invalid load key, '\x00'.
+2025-07-09 12:15:06,458 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/17311_23_sBBC_93.h5: invalid load key, '\x00'.
+2025-07-09 12:15:06,492 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/45428_21_PEK-G3_4-144.h5: invalid load key, '\x00'.
+2025-07-09 12:15:06,615 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/25363_23_sBBC_38.h5: invalid load key, '\x00'.
+2025-07-09 12:15:07,058 - __main__ - ERROR - Training failed: too many values to unpack (expected 2)
+2025-07-09 17:07:06,475 - __main__ - INFO - Offline environment configured
+2025-07-09 17:07:06,484 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-09 17:07:06,485 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-09 17:07:06,485 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-09 17:07:06,487 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-09 17:07:06,488 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-09 17:07:06,488 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-09 17:07:06,492 - datasets.datasets - INFO - Loaded 251 samples from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal
+2025-07-09 17:07:06,511 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-09 17:07:06,511 - __main__ - INFO - Dataset: 251 samples
+2025-07-09 17:07:06,511 - __main__ - INFO - Class distribution: [194  57]
+2025-07-09 17:07:08,930 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-09 17:07:08,930 - utils.pretrained_loader - ERROR - Failed to load pretrained weights: name 'PretrainedAggregator' is not defined
+2025-07-09 17:07:08,930 - utils.pretrained_loader - ERROR - Training from scratch...
+2025-07-09 17:07:08,930 - __main__ - WARNING - Failed to load pretrained weights, training from scratch
+2025-07-09 17:07:12,287 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/28439_23_iBCC_57.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,294 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/39268_21_PEK-G3_4-167.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,295 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/24955_23_sBBC_41.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,306 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/30837_23_iBCC_16.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,398 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/37035_21_PEK-G3_4-181.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,428 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/22578_23_iBCC_203.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,451 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/5617_23_sBBC_193.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,486 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/18094_23_sBBC_86.h5: invalid load key, '\x00'.
+2025-07-09 17:07:12,546 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/5327_23_sBBC_195.h5: invalid load key, '\x00'.
+2025-07-09 17:07:13,022 - __main__ - ERROR - Training failed: too many indices for tensor of dimension 1
+2025-07-09 17:35:21,116 - __main__ - INFO - Offline environment configured
+2025-07-09 17:35:21,122 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-09 17:35:21,123 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-09 17:35:21,123 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-09 17:35:21,125 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-09 17:35:21,126 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-09 17:35:21,126 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-09 17:35:21,131 - datasets.datasets - INFO - Loaded 251 samples from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal
+2025-07-09 17:35:21,133 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-09 17:35:21,133 - __main__ - INFO - Dataset: 251 samples
+2025-07-09 17:35:21,133 - __main__ - INFO - Class distribution: [194  57]
+2025-07-09 17:35:23,083 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-09 17:35:23,083 - utils.pretrained_loader - ERROR - Failed to load pretrained weights: name 'PretrainedAggregator' is not defined
+2025-07-09 17:35:23,083 - utils.pretrained_loader - ERROR - Training from scratch...
+2025-07-09 17:35:23,083 - __main__ - WARNING - Failed to load pretrained weights, training from scratch
+2025-07-09 17:35:25,484 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/28439_23_iBCC_57.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,492 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/39268_21_PEK-G3_4-167.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,537 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/24955_23_sBBC_41.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,547 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/30837_23_iBCC_16.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,578 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/22578_23_iBCC_203.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,583 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/37035_21_PEK-G3_4-181.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,619 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/5617_23_sBBC_193.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,681 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/18094_23_sBBC_86.h5: invalid load key, '\x00'.
+2025-07-09 17:35:25,745 - datasets.datasets - WARNING - Failed to load data from ../anne_data/512px_uni-vit-l-16_0.5mpp_0xdown_normal/5327_23_sBBC_195.h5: invalid load key, '\x00'.
+2025-07-09 17:35:26,236 - __main__ - ERROR - Training failed: too many indices for tensor of dimension 1
+2025-07-11 12:24:56,358 - __main__ - INFO - Offline environment configured
+2025-07-11 12:24:56,365 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-11 12:24:56,366 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-11 12:24:56,367 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-11 12:24:56,439 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-11 12:24:56,440 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-11 12:24:56,440 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-11 12:24:56,451 - datasets.datasets - INFO - Scanned and cached dataset: 251 files
+2025-07-11 12:24:56,454 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-11 12:24:56,454 - __main__ - INFO - Dataset: 251 samples
+2025-07-11 12:24:56,455 - __main__ - INFO - Class distribution: [194  57]
+2025-07-11 12:24:59,125 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-11 12:25:00,660 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-11 12:27:40,794 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-11 12:28:07,313 - utils.pretrained_loader - ERROR - Failed to load pretrained weights: Error(s) in loading state_dict for HistoGPTForCausalLM:
+	Missing key(s) in state_dict: "histogpt.aggregator.head.bias". 
+2025-07-11 12:28:07,313 - utils.pretrained_loader - ERROR - Training from scratch...
+2025-07-11 12:28:07,737 - __main__ - WARNING - Failed to load pretrained weights, training from scratch
+2025-07-11 12:28:13,793 - __main__ - ERROR - Training failed: not enough values to unpack (expected 3, got 2)
+2025-07-11 14:48:38,691 - __main__ - INFO - Offline environment configured
+2025-07-11 14:48:38,758 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-11 14:48:38,759 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-11 14:48:38,761 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-11 14:48:38,857 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-11 14:48:38,858 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-11 14:48:38,858 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-11 14:48:38,873 - datasets.datasets - INFO - Scanned and cached dataset: 251 files
+2025-07-11 14:48:38,877 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-11 14:48:38,877 - __main__ - INFO - Dataset: 251 samples
+2025-07-11 14:48:38,877 - __main__ - INFO - Class distribution: [194  57]
+2025-07-11 14:48:41,630 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-11 14:48:43,852 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-11 14:48:43,852 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-11 14:49:08,276 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-11 14:49:08,437 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-11 14:49:13,234 - __main__ - ERROR - Training failed: not enough values to unpack (expected 3, got 2)
+2025-07-11 15:35:41,983 - __main__ - INFO - Offline environment configured
+2025-07-11 15:35:41,989 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-11 15:35:41,990 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-11 15:35:41,991 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-11 15:35:42,032 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-11 15:35:42,032 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-11 15:35:42,033 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-11 15:35:42,037 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-11 15:35:42,063 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-11 15:35:42,063 - __main__ - INFO - Dataset: 251 samples
+2025-07-11 15:35:42,063 - __main__ - INFO - Class distribution: [194  57]
+2025-07-11 15:35:44,464 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-11 15:35:45,988 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-11 15:35:45,988 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-11 15:36:10,866 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-11 15:36:10,960 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-11 15:36:18,797 - __main__ - ERROR - Training failed: Expected target size [1, 2], got [1]
+2025-07-11 20:01:27,299 - __main__ - INFO - Offline environment configured
+2025-07-11 20:01:27,305 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-11 20:01:27,306 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-11 20:01:27,307 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-11 20:01:27,393 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-11 20:01:27,394 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-11 20:01:27,394 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-11 20:01:27,399 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-11 20:01:27,402 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-11 20:01:27,402 - __main__ - INFO - Dataset: 251 samples
+2025-07-11 20:01:27,402 - __main__ - INFO - Class distribution: [194  57]
+2025-07-11 20:01:29,753 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-11 20:01:31,276 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-11 20:01:31,276 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-11 20:01:56,822 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-11 20:01:56,950 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-11 20:02:07,092 - __main__ - ERROR - Training failed: Expected target size [1, 2], got [1]
+2025-07-12 00:15:48,633 - __main__ - INFO - Offline environment configured
+2025-07-12 00:15:48,719 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-12 00:15:48,720 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-12 00:15:48,721 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-12 00:15:48,807 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-12 00:15:48,808 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-12 00:15:48,809 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-12 00:15:48,815 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-12 00:15:48,833 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-12 00:15:48,834 - __main__ - INFO - Dataset: 251 samples
+2025-07-12 00:15:48,834 - __main__ - INFO - Class distribution: [194  57]
+2025-07-12 00:15:51,485 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-12 00:15:53,008 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-12 00:15:53,008 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-12 00:16:19,787 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-12 00:16:19,880 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-12 00:16:31,158 - __main__ - ERROR - Training failed: Expected input batch_size (1) to match target batch_size (0).
+2025-07-12 09:56:06,716 - __main__ - INFO - Offline environment configured
+2025-07-12 09:56:06,811 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-12 09:56:06,812 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-12 09:56:06,814 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-12 09:56:06,929 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-12 09:56:06,930 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-12 09:56:06,930 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-12 09:56:06,937 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-12 09:56:06,940 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-12 09:56:06,940 - __main__ - INFO - Dataset: 251 samples
+2025-07-12 09:56:06,941 - __main__ - INFO - Class distribution: [194  57]
+2025-07-12 09:56:09,438 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-12 09:56:10,962 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-12 09:56:10,962 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-12 09:56:36,690 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-12 09:56:36,781 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-12 09:56:47,580 - __main__ - ERROR - Training failed: Numpy is not available
+2025-07-13 02:20:52,991 - __main__ - INFO - Offline environment configured
+2025-07-13 02:20:53,000 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-13 02:20:53,000 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-13 02:20:53,001 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-13 02:20:53,091 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-13 02:20:53,093 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-13 02:20:53,093 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-13 02:20:53,099 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-13 02:20:53,102 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-13 02:20:53,102 - __main__ - INFO - Dataset: 251 samples
+2025-07-13 02:20:53,102 - __main__ - INFO - Class distribution: [194  57]
+2025-07-13 02:20:55,522 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-13 02:20:57,044 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-13 02:20:57,044 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-13 02:21:22,610 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-13 02:21:22,728 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-13 02:21:33,728 - __main__ - ERROR - Training failed: Numpy is not available
+2025-07-13 11:33:52,007 - __main__ - INFO - Offline environment configured
+2025-07-13 11:33:52,013 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-13 11:33:52,014 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-13 11:33:52,015 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-13 11:33:52,099 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-13 11:33:52,100 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-13 11:33:52,100 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-13 11:33:52,105 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-13 11:33:52,108 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-13 11:33:52,109 - __main__ - INFO - Dataset: 251 samples
+2025-07-13 11:33:52,109 - __main__ - INFO - Class distribution: [194  57]
+2025-07-13 11:33:54,446 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-13 11:33:55,962 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-13 11:33:55,962 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-13 11:34:21,995 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-13 11:34:22,111 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-13 11:34:33,818 - __main__ - ERROR - Training failed: Got unsupported ScalarType BFloat16
+2025-07-14 09:43:31,000 - __main__ - INFO - Offline environment configured
+2025-07-14 09:43:31,007 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-14 09:43:31,008 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-14 09:43:31,009 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-14 09:43:31,070 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-14 09:43:31,071 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-14 09:43:31,071 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-14 09:43:31,076 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-14 09:43:31,115 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-14 09:43:31,115 - __main__ - INFO - Dataset: 251 samples
+2025-07-14 09:43:31,115 - __main__ - INFO - Class distribution: [194  57]
+2025-07-14 09:43:33,469 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 09:43:34,993 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 09:43:34,993 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 09:44:00,040 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 09:44:00,133 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 09:44:13,020 - __main__ - ERROR - Training failed: invalid index of a 0-dim tensor. Use `tensor.item()` in Python or `tensor.item<T>()` in C++ to convert a 0-dim tensor to a number
+2025-07-14 09:56:19,184 - __main__ - INFO - Offline environment configured
+2025-07-14 09:56:19,190 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-14 09:56:19,190 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-14 09:56:19,191 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-14 09:56:19,193 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-14 09:56:19,194 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-14 09:56:19,194 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-14 09:56:19,198 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-14 09:56:19,200 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-14 09:56:19,201 - __main__ - INFO - Dataset: 251 samples
+2025-07-14 09:56:19,201 - __main__ - INFO - Class distribution: [194  57]
+2025-07-14 09:56:21,341 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 09:56:23,309 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 09:56:23,310 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 09:56:38,155 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 09:56:38,249 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 10:11:48,051 - __main__ - INFO - Fold 1 Results: {'test_loss': 0.15828371047973633, 'test_auroc': 1.0, 'test_f1_macro': 0.95652174949646, 'test_balanced_acc': 0.9803921580314636, 'test_acc': 0.9803921580314636, 'test_precision_macro': 1.0, 'test_recall_macro': 0.9166666865348816, 'test_f1_weighted': 0.95652174949646, 'test_precision_bcc': 1.0, 'test_precision_scc': 1.0, 'test_recall_bcc': 0.9166666865348816, 'test_recall_scc': 0.9166666865348816, 'test_f1_bcc': 0.95652174949646, 'test_f1_scc': 0.95652174949646}
+2025-07-14 10:11:50,071 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 10:11:52,040 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 10:11:52,041 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 10:11:57,824 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 10:11:57,913 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 10:27:12,090 - __main__ - INFO - Fold 2 Results: {'test_loss': 0.04000125452876091, 'test_auroc': 1.0, 'test_f1_macro': 0.95652174949646, 'test_balanced_acc': 0.9800000190734863, 'test_acc': 0.9800000190734863, 'test_precision_macro': 0.9166666865348816, 'test_recall_macro': 1.0, 'test_f1_weighted': 0.95652174949646, 'test_precision_bcc': 0.9166666865348816, 'test_precision_scc': 0.9166666865348816, 'test_recall_bcc': 1.0, 'test_recall_scc': 1.0, 'test_f1_bcc': 0.95652174949646, 'test_f1_scc': 0.95652174949646}
+2025-07-14 10:27:13,673 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 10:27:15,196 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 10:27:15,197 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 10:27:24,226 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 10:27:24,317 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 10:42:39,436 - __main__ - INFO - Fold 3 Results: {'test_loss': 3.6764145079359878e-06, 'test_auroc': 1.0, 'test_f1_macro': 1.0, 'test_balanced_acc': 1.0, 'test_acc': 1.0, 'test_precision_macro': 1.0, 'test_recall_macro': 1.0, 'test_f1_weighted': 1.0, 'test_precision_bcc': 1.0, 'test_precision_scc': 1.0, 'test_recall_bcc': 1.0, 'test_recall_scc': 1.0, 'test_f1_bcc': 1.0, 'test_f1_scc': 1.0}
+2025-07-14 10:42:41,480 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 10:42:43,460 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 10:42:43,460 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 10:42:49,249 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 10:42:49,339 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 10:58:05,699 - __main__ - INFO - Fold 4 Results: {'test_loss': 0.046562522649765015, 'test_auroc': 1.0, 'test_f1_macro': 0.9523809552192688, 'test_balanced_acc': 0.9800000190734863, 'test_acc': 0.9800000190734863, 'test_precision_macro': 1.0, 'test_recall_macro': 0.9090909361839294, 'test_f1_weighted': 0.9523809552192688, 'test_precision_bcc': 1.0, 'test_precision_scc': 1.0, 'test_recall_bcc': 0.9090909361839294, 'test_recall_scc': 0.9090909361839294, 'test_f1_bcc': 0.9523809552192688, 'test_f1_scc': 0.9523809552192688}
+2025-07-14 10:58:07,743 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-14 10:58:09,716 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-14 10:58:09,717 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-14 10:58:15,355 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-14 10:58:15,440 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-14 11:13:40,256 - __main__ - INFO - Fold 5 Results: {'test_loss': 0.016720997169613838, 'test_auroc': 1.0, 'test_f1_macro': 0.9599999785423279, 'test_balanced_acc': 0.9800000190734863, 'test_acc': 0.9800000190734863, 'test_precision_macro': 0.9230769276618958, 'test_recall_macro': 1.0, 'test_f1_weighted': 0.9599999785423279, 'test_precision_bcc': 0.9230769276618958, 'test_precision_scc': 0.9230769276618958, 'test_recall_bcc': 1.0, 'test_recall_scc': 1.0, 'test_f1_bcc': 0.9599999785423279, 'test_f1_scc': 0.9599999785423279}
+2025-07-14 11:13:40,294 - __main__ - INFO - Results saved to results/cv_results_20250714_111340.json
+2025-07-14 11:13:40,298 - __main__ - INFO - Summary saved to results/summary_20250714_111340.txt
+2025-07-15 01:08:41,926 - __main__ - INFO - Offline environment configured
+2025-07-15 01:08:42,061 - __main__ - INFO - Found HistoGPT weights: ../histogpt-l-6k-pruned.pt
+2025-07-15 01:08:42,062 - __main__ - INFO - Found BioGPT model directory: ../microsoft_biogpt-large
+2025-07-15 01:08:42,064 - __main__ - INFO - Found BioGPT config: ../microsoft_biogpt-large/config.json
+2025-07-15 01:08:42,154 - __main__ - INFO - Found BioGPT model: ../microsoft_biogpt-large/pytorch_model.bin
+2025-07-15 01:08:42,155 - __main__ - INFO - Found BioGPT tokenizer: ../microsoft_biogpt-large/tokenizer_config.json
+2025-07-15 01:08:42,155 - __main__ - INFO - Starting offline cross-validation with 5 folds
+2025-07-15 01:08:42,162 - datasets.datasets - INFO - Loaded dataset from cache: 251 files
+2025-07-15 01:08:42,200 - datasets.datasets - INFO - Class distribution: [194  57]
+2025-07-15 01:08:42,200 - __main__ - INFO - Dataset: 251 samples
+2025-07-15 01:08:42,201 - __main__ - INFO - Class distribution: [194  57]
+2025-07-15 01:08:44,833 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-15 01:08:46,354 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-15 01:08:46,355 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-15 01:09:11,784 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-15 01:09:11,947 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-15 01:25:30,330 - __main__ - INFO - Fold 1 Results: {'val_loss': 0.11349543184041977, 'val_auroc': 0.9978631734848022, 'val_f1_macro': 0.9166666865348816, 'val_balanced_acc': 0.9607843160629272, 'val_acc': 0.9607843160629272, 'val_f1_weighted': 0.9166666865348816, 'val_precision_macro': 0.9166666865348816, 'val_recall_macro': 0.9166666865348816, 'val_precision_bcc': 0.9166666865348816, 'val_precision_scc': 0.9166666865348816, 'val_recall_bcc': 0.9166666865348816, 'val_recall_scc': 0.9166666865348816, 'val_f1_bcc': 0.9166666865348816, 'val_f1_scc': 0.9166666865348816}
+2025-07-15 01:25:32,775 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-15 01:25:34,743 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-15 01:25:34,744 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-15 01:25:49,318 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-15 01:25:49,402 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-15 01:40:02,805 - __main__ - INFO - Fold 2 Results: {'val_loss': 0.04023870453238487, 'val_auroc': 1.0, 'val_f1_macro': 1.0, 'val_balanced_acc': 1.0, 'val_acc': 1.0, 'val_f1_weighted': 1.0, 'val_precision_macro': 1.0, 'val_recall_macro': 1.0, 'val_precision_bcc': 1.0, 'val_precision_scc': 1.0, 'val_recall_bcc': 1.0, 'val_recall_scc': 1.0, 'val_f1_bcc': 1.0, 'val_f1_scc': 1.0}
+2025-07-15 01:40:04,448 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-15 01:40:05,968 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-15 01:40:05,968 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-15 01:40:24,302 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-15 01:40:24,390 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-15 01:53:03,061 - __main__ - INFO - Fold 3 Results: {'val_loss': 0.029281005263328552, 'val_auroc': 1.0, 'val_f1_macro': 0.95652174949646, 'val_balanced_acc': 0.9800000190734863, 'val_acc': 0.9800000190734863, 'val_f1_weighted': 0.95652174949646, 'val_precision_macro': 0.9166666865348816, 'val_recall_macro': 1.0, 'val_precision_bcc': 0.9166666865348816, 'val_precision_scc': 0.9166666865348816, 'val_recall_bcc': 1.0, 'val_recall_scc': 1.0, 'val_f1_bcc': 0.95652174949646, 'val_f1_scc': 0.95652174949646}
+2025-07-15 01:53:05,153 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-15 01:53:07,128 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-15 01:53:07,128 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-15 01:53:23,433 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-15 01:53:23,517 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-15 02:03:42,427 - __main__ - INFO - Fold 4 Results: {'val_loss': 0.06187377870082855, 'val_auroc': 0.9999999403953552, 'val_f1_macro': 1.0, 'val_balanced_acc': 1.0, 'val_acc': 1.0, 'val_f1_weighted': 1.0, 'val_precision_macro': 1.0, 'val_recall_macro': 1.0, 'val_precision_bcc': 1.0, 'val_precision_scc': 1.0, 'val_recall_bcc': 1.0, 'val_recall_scc': 1.0, 'val_f1_bcc': 1.0, 'val_f1_scc': 1.0}
+2025-07-15 02:03:44,074 - utils.pretrained_loader - INFO - Loading HistoGPT model (offline mode)...
+2025-07-15 02:03:45,610 - utils.pretrained_loader - INFO - Loading BioGPT from local path: ../microsoft_biogpt-large
+2025-07-15 02:03:45,610 - utils.pretrained_loader - INFO - Loading HistoGPT weights from: ../histogpt-l-6k-pruned.pt
+2025-07-15 02:04:00,503 - utils.pretrained_loader - INFO - HistoGPT weights loaded successfully
+2025-07-15 02:04:00,609 - utils.pretrained_loader - INFO - Transferred 79 weight tensors from pretrained aggregator
+2025-07-15 02:14:49,845 - __main__ - INFO - Fold 5 Results: {'val_loss': 0.07207946479320526, 'val_auroc': 0.9978070259094238, 'val_f1_macro': 0.9599999785423279, 'val_balanced_acc': 0.9800000190734863, 'val_acc': 0.9800000190734863, 'val_f1_weighted': 0.9599999785423279, 'val_precision_macro': 0.9230769276618958, 'val_recall_macro': 1.0, 'val_precision_bcc': 0.9230769276618958, 'val_precision_scc': 0.9230769276618958, 'val_recall_bcc': 1.0, 'val_recall_scc': 1.0, 'val_f1_bcc': 0.9599999785423279, 'val_f1_scc': 0.9599999785423279}
+2025-07-15 02:14:49,991 - __main__ - INFO - Results saved to results/cv_results_20250715_021449.json
+2025-07-15 02:15:08,425 - __main__ - INFO - Best model from fold 2 saved to results/best_model
+2025-07-15 02:15:08,428 - __main__ - INFO - Summary saved to results/summary_20250715_021449.txt
