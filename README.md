@@ -1,6 +1,10 @@
-## HistoGPT-LV — MIL fine-tuning and inference (BCC vs SCC)
+## HistoGPT-LV — for classifying BCC vs cSCC
 
-This repo fine-tunes a Multiple Instance Learning (MIL) classifier on slide-level patch features using a pretrained HistoGPT aggregator, then exports a self-contained inference model you can run offline on `.h5` feature files.
+This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can run offline on `.h5` feature files.
+
+### Ackowledgment
+
+The model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne at Erlangen University.
 
 ### What’s here
 - `finetune/train_mil_classifier.py`: Cross-validated fine-tuning using PyTorch Lightning
@@ -85,4 +89,3 @@ python -m finetune.utils.plot_cv_results \
   --outdir ./plots --format png --dpi 150
 ```
 
-This creates per-fold bar charts for AUROC, F1 (macro), balanced accuracy, accuracy, and grouped per-class metrics.
