@@ -1,6 +1,6 @@
 ## HistoGPT-LV — for classifying BCC vs cSCC
 
-This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can run offline on `.h5` feature files with [the pre-trained model](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link).
+This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can run offline on `.h5` feature files with [the fine‑tuned model](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link).
 
 ### Ackowledgment
 
@@ -52,8 +52,8 @@ python -m finetune.utils.export_inference_model \
   --output histogpt-bcc_cscc.pth
 ```
 
-### 2) `run_best_model`
-- Loads the exported `.pth`, or [pre-trained `.pth`](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link), reconstructs `CancerClassifier` from `architecture_config`, wraps it in an `InferenceModel` that disables training features and sets eval.
+### `run_best_model`
+- Loads the [`.pth`](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link), reconstructs `CancerClassifier` from `architecture_config`, wraps it in an `InferenceModel` that disables training features and sets eval.
 - Loads one `.h5` file, optionally limits patches (for memory), converts features to bfloat16, and runs a forward pass under autocast.
 - Produces logits → softmax probabilities → predicted class and human-readable diagnosis, with confidence.
 
