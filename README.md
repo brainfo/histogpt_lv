@@ -2,6 +2,10 @@
 
 This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can run offline on `.h5` feature files.
 
+### Ackowledgment
+
+This repo is for Anne Petzold's project. The model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne Petzold at Markus Heppt's lab at Universitätsklinikum Erlangen.
+
 ### Setup
 
 ```bash
@@ -10,14 +14,7 @@ pip install -r requirements.txt
 pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
 ```
 
-Tested with:
-- Python 3.10/3.11
-- PyTorch 2.2.2 + CUDA 11.8
-- GPU with bfloat16 support recommended (Ampere+). CPU works (slower).
-
-### Ackowledgment
-
-The model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne at Erlangen University.
+Tested with Python 3.10 PyTorch 2.2.2 + CUDA 11.8
 
 ### What’s here
 - `finetune/train_mil_classifier.py`: Cross-validated fine-tuning using PyTorch Lightning
