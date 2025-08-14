@@ -16,7 +16,23 @@ pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
 
 Tested with Python 3.10 PyTorch 2.2.2 + CUDA 11.8
 
-### fine-tuning
+### `run_best_model`
+- Loads the [`.pth`](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link), reconstructs `CancerClassifier` from `architecture_config`, wraps it in an `InferenceModel` that disables training features and sets eval.
+- Loads one `.h5` file, optionally limits patches (for memory), converts features to bfloat16, and runs a forward pass under autocast.
+- Produces logits → softmax probabilities → predicted class and human-readable diagnosis, with confidence.
+
+Run inference on one slide:
+
+```bash
+python run_best_model.py \
+  --model histogpt-bcc_cscc.pth \
+  --h5_file /path/to/slide_features.h5 \
+  --max_patches 1000 \
+  --device auto \
+  --output_file inference_result.json
+```
+
+### Notes on fine-tuning
 - **Data**: Precomputed patch features per slide are stored as `.h5` with datasets `features` and `coordinates`. Labels are inferred from filename tokens:
   - `sbbc`, `ibcc` → basal cell carcinoma (class 0)
   - `pek` → squamous cell carcinoma (class 1)
@@ -50,20 +66,4 @@ python -m finetune.utils.export_inference_model \
   --histogpt_weights /path/to/histogpt_pretrained.pth \
   --biogpt_path /path/to/local/microsoft_biogpt-large \
   --output histogpt-bcc_cscc.pth
-```
-
-### `run_best_model`
-- Loads the [`.pth`](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link), reconstructs `CancerClassifier` from `architecture_config`, wraps it in an `InferenceModel` that disables training features and sets eval.
-- Loads one `.h5` file, optionally limits patches (for memory), converts features to bfloat16, and runs a forward pass under autocast.
-- Produces logits → softmax probabilities → predicted class and human-readable diagnosis, with confidence.
-
-Run inference on one slide:
-
-```bash
-python run_best_model.py \
-  --model histogpt-bcc_cscc.pth \
-  --h5_file /path/to/slide_features.h5 \
-  --max_patches 1000 \
-  --device auto \
-  --output_file inference_result.json
 ```
