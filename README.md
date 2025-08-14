@@ -2,6 +2,19 @@
 
 This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can run offline on `.h5` feature files.
 
+### Setup
+
+```bash
+pip install -r requirements.txt
+# Required (Perceiver backbone, not on PyPI):
+pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
+```
+
+Tested with:
+- Python 3.10/3.11
+- PyTorch 2.2.2 + CUDA 11.8
+- GPU with bfloat16 support recommended (Ampere+). CPU works (slower).
+
 ### Ackowledgment
 
 The model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne at Erlangen University.
@@ -61,6 +74,8 @@ The exported file contains the wrapped weights plus `architecture_config` so it 
 - Loads one `.h5` file, optionally limits patches (for memory), converts features to bfloat16, and runs a forward pass under autocast.
 - Produces logits → softmax probabilities → predicted class and human-readable diagnosis, with confidence; optionally saves a JSON or text record.
 
+Note: FlashAttention is not required for inference. The loader sets `use_flash_attn=False`.
+
 Run inference on one slide:
 
 ```bash
@@ -78,6 +93,11 @@ If you need to build `.h5` features yourself, see `finetune/helpers/patching.py`
 ### Tips
 - Run scripts from the repo root so relative imports resolve (e.g., `models.*`).
  - GPU with bfloat16 support is recommended; inference will fall back to CPU if no cuda.
+
+### Troubleshooting
+- If you see `ModuleNotFoundError: fused_layer_norm_cuda` on GPU:
+  - Run on CPU (`--device cpu`) or
+  - Install a fused layer norm CUDA extension (e.g., NVIDIA Apex with fused layer norm). If you prefer, open an issue and we can provide a non-fused fallback.
 
 ### Charts (CV results)
 You can generate charts from a saved CV JSON (e.g., `finetune/results/cv_results_YYYYMMDD_HHMMSS.json`):

@@ -8,3 +8,7 @@ transformers>=4.30.0 #4.37.2
 # flash-perceiver is not on PyPI, install from source:
 # pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
 einops>=0.7.0 #0.7.0
+
+# Optional (GPU): some environments use a fused layer norm CUDA extension.
+# If you encounter `ModuleNotFoundError: fused_layer_norm_cuda`, either run on CPU
+# or install a fused layer norm extension (e.g., NVIDIA Apex with fused layer norm support).
