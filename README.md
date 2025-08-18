@@ -4,7 +4,7 @@ This repo fine-tunes [HistoGPT](https://github.com/marrlab/HistoGPT). you can ru
 
 ### Ackowledgment
 
-This repo is for Anne Petzold's project. The model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne Petzold at Markus Heppt's lab at Universitätsklinikum Erlangen.
+This repo is for Anne Petzold's project. The pre-trained model was from [HistoGPT](https://github.com/marrlab/HistoGPT) under Apache License. The dataset was from Anne Petzold at Markus Heppt's lab at Universitätsklinikum Erlangen.
 
 ### Setup
 
