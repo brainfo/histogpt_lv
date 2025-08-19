@@ -9,8 +9,8 @@ This repo is for Anne Petzold's project. The pre-trained model was from [HistoGP
 ### Setup
 
 ```bash
-uv venv python/3.10
-uv pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cu118 
+uv venv --python 3.10
+uv pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 
 uv pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
 ```
 
