@@ -9,9 +9,9 @@ This repo is for Anne Petzold's project. The pre-trained model was from [HistoGP
 ### Setup
 
 ```bash
-pip install -r requirements.txt
-# Required (Perceiver backbone, not on PyPI):
-pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
+uv venv python/3.10
+uv pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cu118 
+uv pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
 ```
 
 Tested with Python 3.10 PyTorch 2.2.2 + CUDA 11.8
