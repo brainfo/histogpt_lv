@@ -1,0 +1,34 @@
+## Core training requirements
+torch>=2.0.0           # 2.2.2+cu118
+numpy>=1.20.0,<2.0.0   # 1.26.4
+h5py>=3.0.0            # 3.14.0
+pytorch-lightning>=2.0.0  # 2.5.1
+torchmetrics>=1.0.0    # 1.7.3
+transformers>=4.30.0   # 4.37.2
+scikit-learn>=1.1.0    # 1.4.2
+tqdm>=4.65.0           # 4.66.4
+tensorboard>=2.12.0    # 2.16.2
+einops>=0.7.0          # 0.7.0
+
+## Model backbones and attention modules
+# FlashPerceiver backbone (not on PyPI) — required
+git+https://github.com/lucidrains/flash-perceiver-pytorch.git
+
+# HistoGPT dependency (for pretrained loading)
+flamingo-pytorch>=0.0.16  # lucidrains
+
+# Optional: GPU fused layer norm extension
+# If you encounter `ModuleNotFoundError: fused_layer_norm_cuda`, either run on CPU
+# or install a fused layer norm CUDA extension (e.g., NVIDIA Apex built with fused layer norm).
+apex  # install from source if desired
+
+## Visualization and thumbnail generation
+matplotlib>=3.7.0          # For plotting attention maps
+opencv-python-headless>=4.8.0  # For image processing
+pillow>=10.0.0             # For image manipulation
+
+## Feature extraction pipeline (building .h5 from WSIs)
+pandas>=2.0.0              # For coordinate handling
+slideio>=2.4.4             # For reading .svs files
+timm>=0.9.0                # For feature extraction models
+torchvision>=0.15.0        # For image transforms

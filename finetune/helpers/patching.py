@@ -511,10 +511,10 @@ def main(args):
 if __name__ == "__main__":
     args = PatchingConfigs()
 
-    args.slide_path = './slide_folder'
-    args.save_path = '/save_folder'
+    args.slide_path = '/proj/sens2022004/nobackup/wharf/hongki/hongki-sens2022004/histogpt_anne/anne_data/evaluation_img'
+    args.save_path = '/proj/sens2022004/nobackup/wharf/hongki/hongki-sens2022004/histogpt_anne/anne_data/evaluation_h5'
 
-    args.model_path = './uni-vit-l-16.bin'
+    args.model_path = '/proj/sens2022004/nobackup/wharf/hongki/hongki-sens2022004/histogpt_anne//uni-vit-l-16.bin'
 
     args.file_extension = '.svs'
     assert args.patch_size == 512
