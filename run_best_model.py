@@ -124,7 +124,7 @@ def load_inference_model(model_path: str):
         d_input=config['d_input'],
         d_model=config['d_model'],
         num_cls=config['num_classes'],
-        use_flash_attn=False
+        use_flash_attn=True
     )
     
     # Create inference wrapper

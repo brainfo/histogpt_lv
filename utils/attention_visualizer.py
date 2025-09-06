@@ -354,7 +354,7 @@ def load_slide_data(h5_path: Path) -> Tuple[np.ndarray, np.ndarray]:
     """
     with h5py.File(h5_path, 'r') as f:
         features = f['features'][:]
-        coordinates = f['coords'][:]
+        coordinates = f['coordinates'][:]
     
     return features, coordinates
 
