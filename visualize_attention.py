@@ -1,12 +1,8 @@
-#!/usr/bin/env python3
 """
 Example script for creating gradient attention visualizations.
 
-This script demonstrates how to use the attention visualization tools
-to create beautiful gradient attention maps like those shown in research papers.
-
 Usage:
-    python examples/visualize_attention.py \
+    python visualize_attention.py \
         --model_path /path/to/trained_model.pth \
         --h5_path /path/to/slide_features.h5 \
         --slide_image /path/to/slide_thumbnail.png \
@@ -24,38 +20,107 @@ import cv2
 import sys
 import os
 
-# Add parent directory to path to import models
-sys.path.append(str(Path(__file__).parent.parent))
-
 from models.aggregator import CancerClassifier
 from utils.attention_visualizer import (
     AttentionExtractor, 
     GradientAttentionVisualizer,
-    load_slide_data,
-    create_thumbnail_from_patches
+    load_slide_data
 )
 
+# Import the working InferenceModel class and load function
+import logging
+logger = logging.getLogger(__name__)
 
-def load_model(model_path: Path, d_input: int = 1536, d_model: int = 768, num_cls: int = 2) -> CancerClassifier:
-    """Load the trained CancerClassifier model."""
-    model = CancerClassifier(d_input=d_input, d_model=d_model, num_cls=num_cls, use_flash_attn=False)
+class InferenceModel(torch.nn.Module):
+    """Self-contained inference model with optimized configuration"""
     
-    # Load state dict
+    def __init__(self, base_model, class_names=None):
+        super().__init__()
+        self.model = base_model
+        self.class_names = class_names or ['basal cell carcinoma', 'squamous cell carcinoma']
+        
+        # Optimize for inference
+        self._prepare_for_inference()
+    
+    def _prepare_for_inference(self):
+        """Prepare model for inference by disabling training features"""
+        def disable_training_features(module):
+            if hasattr(module, 'gradient_checkpointing'):
+                module.gradient_checkpointing = False
+            module.training = False
+            for child in module.children():
+                disable_training_features(child)
+        
+        disable_training_features(self.model)
+        self.model.eval()
+    
+    def forward(self, feats_list, coords_list):
+        """Forward pass optimized for inference"""
+        with torch.no_grad():
+            return self.model.forward(feats_list, coords_list)
+    
+    def predict(self, feats, coords, device='auto'):
+        """High-level prediction interface"""
+        if device == 'auto':
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        elif isinstance(device, str):
+            device = torch.device(device)
+        
+        # Move to device and ensure proper dtype
+        feats = feats.to(device, dtype=torch.bfloat16)
+        coords = coords.to(device)
+        self.model = self.model.to(device, dtype=torch.bfloat16)
+        
+        # Convert to list format expected by model
+        feats_list = [feats[0]] if feats.dim() == 3 else [feats]
+        coords_list = [coords[0]] if coords.dim() == 3 else [coords]
+        
+        # Forward pass with autocast for mixed precision
+        with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', dtype=torch.bfloat16):
+            logits = self.forward(feats_list, coords_list)
+        
+        # Calculate probabilities and prediction
+        probs = torch.nn.functional.softmax(logits, dim=1)
+        pred_class = torch.argmax(logits, dim=1)
+        
+        return {
+            'logits': logits,
+            'probabilities': probs,
+            'predicted_class': pred_class,
+            'predicted_diagnosis': self.class_names[pred_class.item()],
+            'confidence': float(probs[0, pred_class].item())
+        }
+
+
+def load_inference_model(model_path: str):
+    """Load the exported inference model"""
+    logger.info(f"Loading inference model from: {model_path}")
+    
+    # Load the saved model data
     checkpoint = torch.load(model_path, map_location='cpu')
     
-    # Handle different checkpoint formats
-    if 'state_dict' in checkpoint:
-        state_dict = checkpoint['state_dict']
-        # Remove 'model.' prefix if present (from Lightning checkpoints)
-        if any(k.startswith('model.') for k in state_dict.keys()):
-            state_dict = {k.replace('model.', ''): v for k, v in state_dict.items()}
-    else:
-        state_dict = checkpoint
+    # Extract architecture config
+    config = checkpoint['architecture_config']
     
-    model.load_state_dict(state_dict)
-    model.eval()
+    # Recreate the base model architecture
+    base_model = CancerClassifier(
+        d_input=config['d_input'],
+        d_model=config['d_model'],
+        num_cls=config['num_classes'],
+        use_flash_attn=True
+    )
     
-    return model
+    # Create inference wrapper
+    inference_model = InferenceModel(
+        base_model=base_model,
+        class_names=checkpoint['class_names']
+    )
+    
+    # Load the saved weights
+    inference_model.load_state_dict(checkpoint['model_state_dict'])
+    
+    logger.info("Inference model loaded successfully")
+    return inference_model
 
 
 def load_slide_image(image_path: Path) -> np.ndarray:
@@ -107,12 +172,6 @@ def main():
                        help="Output directory for visualizations")
     parser.add_argument("--slide_name", type=str, default="slide",
                        help="Name for output files")
-    parser.add_argument("--d_input", type=int, default=1536,
-                       help="Model input dimension")
-    parser.add_argument("--d_model", type=int, default=768,
-                       help="Model hidden dimension")
-    parser.add_argument("--num_classes", type=int, default=2,
-                       help="Number of classes")
     parser.add_argument("--slide_width", type=int, default=20000,
                        help="Original slide width in pixels")
     parser.add_argument("--slide_height", type=int, default=15000,
@@ -126,7 +185,7 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     
     print(f"Loading model from {args.model_path}")
-    model = load_model(args.model_path, args.d_input, args.d_model, args.num_classes)
+    model = load_inference_model(str(args.model_path))
     
     print(f"Loading slide data from {args.h5_path}")
     features, coordinates = load_slide_data(args.h5_path)
@@ -137,7 +196,7 @@ def main():
     
     # Extract attention weights
     print("Extracting attention weights...")
-    extractor = AttentionExtractor(model)
+    extractor = AttentionExtractor(model.model)  # Use the base model from InferenceModel wrapper
     
     # Prepare input tensors
     x = torch.tensor(features).unsqueeze(0).float()  # Add batch dimension

@@ -2,32 +2,8 @@
 
 This module provides tools to create beautiful gradient attention maps for histopathology images, similar to those shown in research papers. The visualization shows which parts of the whole slide image the model is focusing on when making predictions.
 
-## Features
-
-- **Attention Weight Extraction**: Extract attention weights from the CancerClassifier model
-- **Spatial Mapping**: Map attention weights back to spatial coordinates on the original slide
-- **Beautiful Visualizations**: Create publication-ready gradient attention heatmaps
-- **Multiple Visualization Types**: 
-  - Side-by-side comparisons (original vs attention overlay)
-  - Pure heatmaps with colorbars
-  - Top-attended patch grids
-  - Statistical summaries
 
 ## Quick Start
-
-### 1. Run the Demo
-
-```bash
-# Create a simple demonstration with dummy data
-python examples/quick_attention_demo.py
-```
-
-This will create visualizations in `./demo_outputs/` showing:
-- Attention comparison plots
-- Pure heatmaps
-- Statistical distributions
-
-### 2. Use with Your Real Data
 
 ```bash
 python examples/visualize_attention.py \
@@ -45,45 +21,6 @@ utils/
 ├── attention_visualizer.py     # Core visualization classes
 examples/
 ├── visualize_attention.py      # Full-featured script for real data
-├── quick_attention_demo.py     # Simple demo with dummy data
-```
-
-## Core Classes
-
-### `AttentionExtractor`
-Extracts attention weights from the CancerClassifier model during forward pass.
-
-```python
-from utils.attention_visualizer import AttentionExtractor
-
-extractor = AttentionExtractor(model)
-attention_data = extractor.extract_attention(features, positions)
-attention_weights = attention_data['attention_weights'][0].numpy()
-```
-
-### `GradientAttentionVisualizer`
-Creates beautiful gradient attention visualizations.
-
-```python
-from utils.attention_visualizer import GradientAttentionVisualizer
-
-visualizer = GradientAttentionVisualizer(patch_size=512)
-
-# Create spatial heatmap
-heatmap = visualizer.create_attention_heatmap(
-    attention_weights, coordinates, slide_dimensions
-)
-
-# Create overlay on background image
-overlay = visualizer.overlay_attention_on_image(
-    background_image, heatmap, alpha=0.6, colormap='jet'
-)
-
-# Create comparison plot
-fig = visualizer.plot_attention_comparison(
-    original_image, overlay, attention_weights,
-    title="Gradient Attention for Basal Cell Carcinoma"
-)
 ```
 
 ## Input Data Requirements
@@ -163,51 +100,6 @@ heatmap = visualizer.create_attention_heatmap(
 )
 ```
 
-## Understanding the Visualizations
-
-### Attention Weights
-- **High values (red/yellow)**: Areas the model focuses on most
-- **Low values (blue/purple)**: Areas the model largely ignores
-- Values are normalized across all patches in the slide
-
-### Combined Attention (with Gates)
-- Combines attention weights with gate scores
-- Shows both "what the model looks at" AND "how much it trusts what it sees"
-- Often provides more interpretable results
-
-### Spatial Patterns
-- **Clustered attention**: Model focuses on specific regions
-- **Scattered attention**: Model considers many different areas
-- **Edge attention**: Model might be focusing on tissue boundaries
-
-## Troubleshooting
-
-### Common Issues
-
-1. **"ModuleNotFoundError: No module named 'utils'"**
-   ```bash
-   # Make sure you're running from the project root
-   cd /path/to/histogpt_lv
-   python examples/visualize_attention.py ...
-   ```
-
-2. **"Model loading failed"**
-   - Check that your model checkpoint matches the expected architecture
-   - Verify `d_input`, `d_model`, and `num_classes` parameters
-
-3. **"H5 file format not recognized"**
-   - Ensure your H5 file contains 'features' and 'coords' datasets
-   - Check that coordinates are in (x, y) format
-
-4. **"Attention weights all zero"**
-   - Model might not be properly loaded
-   - Try running the demo first to verify the code works
-
-### Performance Tips
-
-1. **Large slides**: Use higher `downsample_factor` for initial exploration
-2. **Memory issues**: Process slides in smaller chunks
-3. **Speed**: Use `use_flash_attn=False` for compatibility if flash attention causes issues
 
 ## Integration with Your Workflow
 
@@ -245,17 +137,4 @@ def inference_with_attention(model, slide_path):
     # ... create plots
     
     return prediction, attention_data
-```
-
-## Citation
-
-If you use this visualization code in your research, please cite:
-
-```bibtex
-@software{histogpt_attention_viz,
-  title={Gradient Attention Visualization for HistoGPT},
-  author={Manuel Tran},
-  organization={Helmholtz Munich},
-  year={2024}
-}
 ```

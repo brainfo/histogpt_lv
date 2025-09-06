@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
 """
 Gradient Attention Map Visualizer for HistoGPT
-© Manuel Tran / Helmholtz Munich
-
-This module provides tools to visualize attention maps from the CancerClassifier model,
-creating beautiful gradient attention heatmaps overlaid on histopathology images.
 """
 
 import torch
