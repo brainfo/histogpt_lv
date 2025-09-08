@@ -344,7 +344,7 @@ def patches_to_feature(
                 batch = batch.to(device)
                 with torch.autocast(device_type="cuda", dtype=torch.float16):
                     features = model(batch.float())
-                patches_features[model_name] += (features.cpu().numpy().tolist())
+                patches_features[model_name] += (features.cpu().float().numpy().tolist())
 
     return patches_features
 

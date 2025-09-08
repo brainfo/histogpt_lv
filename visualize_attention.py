@@ -203,8 +203,8 @@ def main():
     pos = torch.zeros((1, features.shape[0], 2)).float()  # Dummy positions
     
     attention_data = extractor.extract_attention(x, pos)
-    attention_weights = attention_data['attention_weights'][0].numpy()  # Remove batch dim
-    combined_attention = attention_data['combined_attention'][0].numpy()
+    attention_weights = attention_data['attention_weights'][0].float().numpy()  # Convert to float32 before numpy
+    combined_attention = attention_data['combined_attention'][0].float().numpy()  # Convert to float32 before numpy
     
     print(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
           f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")

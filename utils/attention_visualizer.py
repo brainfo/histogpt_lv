@@ -431,7 +431,7 @@ def example_usage():
     pos = torch.zeros((1, features.shape[0], 2))  # Dummy positions
     
     attention_data = extractor.extract_attention(x, pos)
-    attention_weights = attention_data['attention_weights'][0].numpy()  # Remove batch dim
+    attention_weights = attention_data['attention_weights'][0].float().numpy()  # Convert to float32 before numpy
     
     # 4. Create visualizations
     visualizer = GradientAttentionVisualizer(patch_size=512)

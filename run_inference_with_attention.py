@@ -179,8 +179,8 @@ def create_attention_visualizations(model, feats, coords, args, results):
     
     # Use the real coordinates (not dummy ones!)
     attention_data = extractor.extract_attention(feats, coords)
-    attention_weights = attention_data['attention_weights'][0].cpu().numpy()  # Force CPU then numpy
-    combined_attention = attention_data['combined_attention'][0].cpu().numpy()  # Force CPU then numpy
+    attention_weights = attention_data['attention_weights'][0].cpu().float().numpy()  # Convert to float32 before numpy
+    combined_attention = attention_data['combined_attention'][0].cpu().float().numpy()  # Convert to float32 before numpy
     
     logger.info(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
                f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")
@@ -193,11 +193,11 @@ def create_attention_visualizations(model, feats, coords, args, results):
     
     # Create heatmaps for both attention types
     attention_heatmap = visualizer.create_attention_heatmap(
-        attention_weights, coords[0].numpy()[:, :2], slide_dims, downsample_factor=args.downsample_factor
+        attention_weights, coords[0].float().numpy()[:, :2], slide_dims, downsample_factor=args.downsample_factor
     )
     
     combined_heatmap = visualizer.create_attention_heatmap(
-        combined_attention, coords[0].numpy()[:, :2], slide_dims, downsample_factor=args.downsample_factor
+        combined_attention, coords[0].float().numpy()[:, :2], slide_dims, downsample_factor=args.downsample_factor
     )
     
     # Load or create background image
@@ -206,7 +206,7 @@ def create_attention_visualizations(model, feats, coords, args, results):
         background_image = load_slide_image(args.slide_image)
     else:
         logger.info("Creating simple background from coordinates...")
-        background_image = create_coord_background(coords[0].numpy()[:, :2])
+        background_image = create_coord_background(coords[0].float().numpy()[:, :2])
     
     # Create attention overlays
     attention_overlay = visualizer.overlay_attention_on_image(
@@ -251,7 +251,7 @@ def create_attention_visualizations(model, feats, coords, args, results):
         f.write(f"  Max:  {attention_weights.max():.6f}\n")
         f.write(f"\nTop 10 most attended patches (coordinates):\n")
         top_indices = np.argsort(attention_weights)[::-1][:10]
-        coords_np = coords[0].numpy()
+        coords_np = coords[0].float().numpy()
         for i, idx in enumerate(top_indices):
             f.write(f"  {i+1}. Patch at ({coords_np[idx][0]:.1f}, {coords_np[idx][1]:.1f}) "
                    f"- Attention: {attention_weights[idx]:.6f}\n")
