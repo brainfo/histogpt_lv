@@ -203,11 +203,11 @@ def main():
     pos = torch.zeros((1, features.shape[0], 2)).float()  # Dummy positions
     
     attention_data = extractor.extract_attention(x, pos)
-    # Import the safe conversion function  
-    from utils.attention_visualizer import to_numpy_safe
+    # Import typed converters
+    from utils.attention_visualizer import to_numpy_weights, to_numpy_coords
     
-    attention_weights = to_numpy_safe(attention_data['attention_weights'][0])  # Safe conversion to numpy
-    combined_attention = to_numpy_safe(attention_data['combined_attention'][0])  # Safe conversion to numpy
+    attention_weights = to_numpy_weights(attention_data['attention_weights'][0])
+    combined_attention = to_numpy_weights(attention_data['combined_attention'][0])
     
     print(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
           f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")

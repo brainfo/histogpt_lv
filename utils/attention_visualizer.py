@@ -15,26 +15,19 @@ from PIL import Image
 import h5py
 
 
-def to_numpy_safe(tensor: torch.Tensor) -> np.ndarray:
-    """
-    Safely convert any torch tensor to numpy array.
-    
-    Handles device transfer (GPU -> CPU) and dtype conversion for numpy compatibility.
-    Uses float16 on CPU for memory efficiency while maintaining numpy compatibility.
-    
-    Args:
-        tensor: PyTorch tensor (any device, any dtype)
-        
-    Returns:
-        NumPy array (always on CPU, float16 if originally floating point)
-    """
-    # Move to CPU first
+def to_numpy_weights(tensor: torch.Tensor) -> np.ndarray:
+    """Convert attention-like floating tensors to numpy float16 on CPU."""
     cpu_tensor = tensor.detach().cpu()
-    
-    # Convert floating point tensors to float16 for numpy compatibility and memory efficiency
     if cpu_tensor.dtype.is_floating_point:
         cpu_tensor = cpu_tensor.half()
-    
+    return cpu_tensor.numpy()
+
+
+def to_numpy_coords(tensor: torch.Tensor) -> np.ndarray:
+    """Convert coordinate-like tensors to numpy float32 on CPU (avoid fp16 overflow)."""
+    cpu_tensor = tensor.detach().cpu()
+    # Always use float32 for coordinates to preserve range/precision
+    cpu_tensor = cpu_tensor.float()
     return cpu_tensor.numpy()
 
 
@@ -178,11 +171,28 @@ class GradientAttentionVisualizer:
         heatmap = np.zeros((heatmap_h, heatmap_w), dtype=np.float32)
         counts = np.zeros((heatmap_h, heatmap_w), dtype=np.float32)
         
+        # Validate inputs: drop NaNs or infinities in coordinates or weights
+        if coordinates.shape[0] != attention_weights.shape[0]:
+            n = min(coordinates.shape[0], attention_weights.shape[0])
+            coordinates = coordinates[:n]
+            attention_weights = attention_weights[:n]
+
+        # Build a mask for valid coordinates and weights
+        coord_mask = np.all(np.isfinite(coordinates), axis=1)
+        weight_mask = np.isfinite(attention_weights)
+        valid_mask = coord_mask & weight_mask
+
+        if not np.any(valid_mask):
+            return heatmap  # nothing to draw
+
+        coordinates = coordinates[valid_mask]
+        attention_weights = attention_weights[valid_mask]
+
         # Map attention weights to spatial locations
         for i, (x, y) in enumerate(coordinates):
             # Convert to heatmap coordinates
-            hx = int(x // downsample_factor)
-            hy = int(y // downsample_factor)
+            hx = int(np.floor(x / downsample_factor))
+            hy = int(np.floor(y / downsample_factor))
             
             # Calculate patch size in heatmap coordinates
             patch_w = max(1, self.patch_size // downsample_factor)
@@ -203,9 +213,11 @@ class GradientAttentionVisualizer:
         mask = counts > 0
         heatmap[mask] /= counts[mask]
         
-        # Normalize to [0, 1]
-        if heatmap.max() > heatmap.min():
-            heatmap = (heatmap - heatmap.min()) / (heatmap.max() - heatmap.min())
+        # Normalize to [0, 1] robustly (avoid NaNs)
+        hmin = float(heatmap.min())
+        hmax = float(heatmap.max())
+        if np.isfinite(hmin) and np.isfinite(hmax) and hmax > hmin:
+            heatmap = (heatmap - hmin) / (hmax - hmin)
         
         return heatmap
     
