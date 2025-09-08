@@ -15,6 +15,29 @@ from PIL import Image
 import h5py
 
 
+def to_numpy_safe(tensor: torch.Tensor) -> np.ndarray:
+    """
+    Safely convert any torch tensor to numpy array.
+    
+    Handles device transfer (GPU -> CPU) and dtype conversion for numpy compatibility.
+    Uses float16 on CPU for memory efficiency while maintaining numpy compatibility.
+    
+    Args:
+        tensor: PyTorch tensor (any device, any dtype)
+        
+    Returns:
+        NumPy array (always on CPU, float16 if originally floating point)
+    """
+    # Move to CPU first
+    cpu_tensor = tensor.detach().cpu()
+    
+    # Convert floating point tensors to float16 for numpy compatibility and memory efficiency
+    if cpu_tensor.dtype.is_floating_point:
+        cpu_tensor = cpu_tensor.half()
+    
+    return cpu_tensor.numpy()
+
+
 class AttentionExtractor:
     """
     Extracts attention weights from CancerClassifier model during forward pass.
@@ -41,12 +64,12 @@ class AttentionExtractor:
             # Capture attention weights from the forward pass
             # This hook captures the attention_weights from line 97 in aggregator.py
             if hasattr(self, '_temp_attention_weights'):
-                self.attention_weights = self._temp_attention_weights.detach().cpu()
+                self.attention_weights = self._temp_attention_weights.detach().cpu().half()  # Ensure float16 on CPU
         
         def gate_hook(module, input, output):
             # Capture gate scores
             if hasattr(self, '_temp_gate_scores'):
-                self.gate_scores = self._temp_gate_scores.detach().cpu()
+                self.gate_scores = self._temp_gate_scores.detach().cpu().half()  # Ensure float16 on CPU
         
         # We'll modify the forward pass to capture intermediate values
         # Register hooks on the classifier layer to know when forward pass is complete
@@ -67,26 +90,30 @@ class AttentionExtractor:
         self.model.eval()
         
         with torch.no_grad():
-            # Run the forward pass up to attention computation
-            x_processed = [self.model.position(x[i], pos[i]) for i in range(len(x))]
-            x_processed = torch.stack(x_processed, dim=0)
-            features = self.model.model(x_processed)
-            features = self.model.norm(features)
+            # Use autocast for GPU operations (bfloat16 on GPU, float16 conversion on CPU)
+            device = next(self.model.parameters()).device
+            with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', 
+                               dtype=torch.bfloat16 if device.type == 'cuda' else torch.float16):
+                # Run the forward pass up to attention computation
+                x_processed = [self.model.position(x[i], pos[i]) for i in range(len(x))]
+                x_processed = torch.stack(x_processed, dim=0)
+                features = self.model.model(x_processed)
+                features = self.model.norm(features)
+                
+                # Compute attention weights (matching aggregator.py lines 94-97)
+                attention_scores = torch.tanh(self.model.attention_V(features))
+                attention_scores = self.model.attention_w(attention_scores)
+                attention_weights = torch.softmax(attention_scores, dim=1)
+                
+                # Compute gate scores (matching aggregator.py lines 99-100)
+                gate_scores = torch.sigmoid(self.model.attention_U(features))
             
-            # Compute attention weights (matching aggregator.py lines 94-97)
-            attention_scores = torch.tanh(self.model.attention_V(features))
-            attention_scores = self.model.attention_w(attention_scores)
-            attention_weights = torch.softmax(attention_scores, dim=1)
-            
-            # Compute gate scores (matching aggregator.py lines 99-100)
-            gate_scores = torch.sigmoid(self.model.attention_U(features))
-            
-            # Store results (move to CPU for visualization)
+            # Store results (keep on GPU with native precision - convert to CPU only when needed for visualization)
             results = {
-                'attention_weights': attention_weights.squeeze(-1).cpu(),  # Remove last dimension (B, 640)
-                'gate_scores': gate_scores.cpu(),  # (B, 640, d_model)
-                'features': features.cpu(),  # (B, 640, d_model)
-                'combined_attention': (attention_weights.squeeze(-1) * gate_scores.mean(dim=-1)).cpu()  # (B, 640)
+                'attention_weights': attention_weights.squeeze(-1),  # Remove last dimension (B, 640) - stay on GPU
+                'gate_scores': gate_scores,  # (B, 640, d_model) - stay on GPU  
+                'features': features,  # (B, 640, d_model) - stay on GPU
+                'combined_attention': (attention_weights.squeeze(-1) * gate_scores.mean(dim=-1))  # (B, 640) - stay on GPU
             }
             
         return results
@@ -431,7 +458,7 @@ def example_usage():
     pos = torch.zeros((1, features.shape[0], 2))  # Dummy positions
     
     attention_data = extractor.extract_attention(x, pos)
-    attention_weights = attention_data['attention_weights'][0].numpy()  # Float16 is numpy-compatible
+    attention_weights = to_numpy_safe(attention_data['attention_weights'][0])  # Safe conversion to numpy
     
     # 4. Create visualizations
     visualizer = GradientAttentionVisualizer(patch_size=512)
