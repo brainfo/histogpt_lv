@@ -81,12 +81,12 @@ class AttentionExtractor:
             # Compute gate scores (matching aggregator.py lines 99-100)
             gate_scores = torch.sigmoid(self.model.attention_U(features))
             
-            # Store results
+            # Store results (move to CPU for visualization)
             results = {
-                'attention_weights': attention_weights.squeeze(-1),  # Remove last dimension (B, 640)
-                'gate_scores': gate_scores,  # (B, 640, d_model)
-                'features': features,  # (B, 640, d_model)
-                'combined_attention': (attention_weights.squeeze(-1) * gate_scores.mean(dim=-1))  # (B, 640)
+                'attention_weights': attention_weights.squeeze(-1).cpu(),  # Remove last dimension (B, 640)
+                'gate_scores': gate_scores.cpu(),  # (B, 640, d_model)
+                'features': features.cpu(),  # (B, 640, d_model)
+                'combined_attention': (attention_weights.squeeze(-1) * gate_scores.mean(dim=-1)).cpu()  # (B, 640)
             }
             
         return results

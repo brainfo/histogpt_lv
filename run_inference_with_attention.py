@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Inference with Attention Visualization
 Combines the working inference from run_best_model.py with attention visualization
@@ -180,8 +179,8 @@ def create_attention_visualizations(model, feats, coords, args, results):
     
     # Use the real coordinates (not dummy ones!)
     attention_data = extractor.extract_attention(feats, coords)
-    attention_weights = attention_data['attention_weights'][0].numpy()  # Already on CPU from extractor
-    combined_attention = attention_data['combined_attention'][0].numpy()  # Already on CPU from extractor
+    attention_weights = attention_data['attention_weights'][0].cpu().numpy()  # Force CPU then numpy
+    combined_attention = attention_data['combined_attention'][0].cpu().numpy()  # Force CPU then numpy
     
     logger.info(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
                f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")
