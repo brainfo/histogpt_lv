@@ -76,7 +76,7 @@ class InferenceModel(torch.nn.Module):
         coords_list = [coords[0]] if coords.dim() == 3 else [coords]
         
         # Forward pass with autocast for mixed precision
-        with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', dtype=torch.bfloat16):
+        with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', dtype=torch.float16):
             logits = self.forward(feats_list, coords_list)
         
         # Calculate probabilities and prediction
@@ -203,8 +203,8 @@ def main():
     pos = torch.zeros((1, features.shape[0], 2)).float()  # Dummy positions
     
     attention_data = extractor.extract_attention(x, pos)
-    attention_weights = attention_data['attention_weights'][0].float().numpy()  # Convert to float32 before numpy
-    combined_attention = attention_data['combined_attention'][0].float().numpy()  # Convert to float32 before numpy
+    attention_weights = attention_data['attention_weights'][0].numpy()  # Float16 is numpy-compatible
+    combined_attention = attention_data['combined_attention'][0].numpy()  # Float16 is numpy-compatible
     
     print(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
           f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")
