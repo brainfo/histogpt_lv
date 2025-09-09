@@ -101,8 +101,8 @@ class InferenceModel(torch.nn.Module):
         feats_list = [feats[0]] if feats.dim() == 3 else [feats]
         coords_list = [coords[0]] if coords.dim() == 3 else [coords]
         
-        # Forward pass with autocast for mixed precision
-        with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', dtype=torch.float16):
+        # Forward pass with autocast for mixed precision (match baseline inference precision)
+        with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', dtype=torch.bfloat16):
             logits = self.forward(feats_list, coords_list)
         
         # Calculate probabilities and prediction
@@ -132,7 +132,7 @@ def load_inference_model(model_path: str):
         d_input=config['d_input'],
         d_model=config['d_model'],
         num_cls=config['num_classes'],
-        use_flash_attn=False  # Use False for compatibility
+        use_flash_attn=True
     )
     
     # Create inference wrapper
@@ -326,6 +326,8 @@ def main():
                         help='Downsample factor for attention heatmap (higher = smaller output)')
     parser.add_argument('--skip_attention', action='store_true',
                         help='Skip attention visualization (inference only)')
+    parser.add_argument('--seed', type=int, default=None,
+                        help='Random seed for deterministic patch subsampling')
     
     args = parser.parse_args()
     
@@ -349,6 +351,10 @@ def main():
         sys.exit(1)
     
     try:
+        # Optionally set random seed for deterministic subsampling
+        if args.seed is not None:
+            np.random.seed(args.seed)
+
         # Load data (same as run_best_model.py)
         feats, coords = load_h5_data(args.h5_file, args.max_patches)
         
