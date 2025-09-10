@@ -190,33 +190,65 @@ def create_attention_visualizations(model, feats, coords, args, results):
     # Initialize visualizer
     visualizer = GradientAttentionVisualizer(patch_size=args.patch_size)
     
-    # Create spatial heatmap
-    slide_dims = (args.slide_width, args.slide_height)
-    
-    # Create heatmaps for both attention types
-    attention_heatmap = visualizer.create_attention_heatmap(
-        attention_weights, to_numpy_coords(coords[0])[:, :2], slide_dims, downsample_factor=args.downsample_factor
+    # Prepare coordinates and scene ids
+    coords_np_full = to_numpy_coords(coords[0])  # shape: (N, 3) [scn, x, y]
+    scn_ids = coords_np_full[:, 0].astype(int)
+    coords_xy = coords_np_full[:, 1:3]
+
+    # Per-scene dims based on extents (approximate if original slide sizes unavailable)
+    coords_by_scene = {s: coords_xy[scn_ids == s] for s in np.unique(scn_ids)}
+    scene_dims = _compute_scene_dims_from_coords(coords_by_scene, patch_size=args.patch_size)
+
+    # Create stitched composite heatmaps across scenes with a gap
+    composite_attention, global_xy, offsets, composite_dims = _create_composite_attention_heatmap(
+        attention_weights,
+        scn_ids,
+        coords_xy,
+        scene_dims,
+        layout='horizontal',
+        gap=args.patch_size,  # visual separation equal to one patch
+        patch_size=args.patch_size,
+        downsample_factor=args.downsample_factor
     )
-    
-    combined_heatmap = visualizer.create_attention_heatmap(
-        combined_attention, to_numpy_coords(coords[0])[:, :2], slide_dims, downsample_factor=args.downsample_factor
+
+    composite_combined, _, _, _ = _create_composite_attention_heatmap(
+        combined_attention,
+        scn_ids,
+        coords_xy,
+        scene_dims,
+        layout='horizontal',
+        gap=args.patch_size,
+        patch_size=args.patch_size,
+        downsample_factor=args.downsample_factor
     )
     
     # Load or create background image
     if args.slide_image and args.slide_image.exists():
         logger.info(f"Loading slide image from {args.slide_image}")
+        # If a single thumbnail corresponds to a single scene, we still overlay composite heatmap
         background_image = load_slide_image(args.slide_image)
+        # Resize background to composite dims for overlay
+        bg_h, bg_w = background_image.shape[0], background_image.shape[1]
+        comp_w, comp_h = composite_dims
+        if (bg_w, bg_h) != (comp_w // args.downsample_factor * args.downsample_factor, comp_h // args.downsample_factor * args.downsample_factor):
+            # Create neutral background matching composite size
+            background_image = np.ones((max(1, comp_h // args.downsample_factor), max(1, comp_w // args.downsample_factor), 3), dtype=np.uint8) * 240
     else:
-        logger.info("Creating simple background from coordinates...")
-        background_image = create_coord_background(to_numpy_coords(coords[0])[:, :2])
+        logger.info("Creating simple background from stitched coordinates...")
+        # Make a simple grid background from global xy
+        min_x, min_y = global_xy.min(axis=0)
+        max_x, max_y = global_xy.max(axis=0)
+        w = int(max_x - min_x) + args.patch_size
+        h = int(max_y - min_y) + args.patch_size
+        background_image = np.ones((max(1, h // args.downsample_factor), max(1, w // args.downsample_factor), 3), dtype=np.uint8) * 240
     
     # Create attention overlays
     attention_overlay = visualizer.overlay_attention_on_image(
-        background_image, attention_heatmap, alpha=0.6, colormap='jet'
+        background_image, composite_attention, alpha=0.6, colormap='jet'
     )
     
     combined_overlay = visualizer.overlay_attention_on_image(
-        background_image, combined_heatmap, alpha=0.6, colormap='plasma'
+        background_image, composite_combined, alpha=0.6, colormap='plasma'
     )
     
     # Save visualizations
@@ -225,7 +257,7 @@ def create_attention_visualizations(model, feats, coords, args, results):
     
     filename_stem = Path(args.h5_file).stem
     
-    # Save comparison plots
+    # Save comparison plots (stitched across scenes)
     fig1 = visualizer.plot_attention_comparison(
         background_image, attention_overlay, attention_weights,
         title=f"Attention Analysis - {results['predicted_diagnosis']} (conf: {results['prediction_confidence']:.3f})",
@@ -238,7 +270,26 @@ def create_attention_visualizations(model, feats, coords, args, results):
         save_path=output_dir / f"{filename_stem}_combined_attention.png"
     )
     
-    # Save attention statistics
+    # Save per-scene heatmaps additionally
+    for s, xy in coords_by_scene.items():
+        if xy.size == 0:
+            continue
+        scene_heatmap = visualizer.create_attention_heatmap(
+            attention_weights[scn_ids == s], xy, scene_dims[s], downsample_factor=args.downsample_factor
+        )
+        scene_overlay = visualizer.overlay_attention_on_image(
+            np.ones((max(1, scene_dims[s][1] // args.downsample_factor), max(1, scene_dims[s][0] // args.downsample_factor), 3), dtype=np.uint8) * 240,
+            scene_heatmap, alpha=0.6, colormap='jet'
+        )
+        plt = __import__('matplotlib.pyplot', fromlist=['plt'])
+        plt.figure(figsize=(8, 6))
+        plt.imshow(scene_overlay)
+        plt.axis('off')
+        plt.title(f'Scene {s} Attention')
+        plt.savefig(output_dir / f"{filename_stem}_scene_{s}_attention.png", dpi=200, bbox_inches='tight')
+        plt.close()
+
+    # Save attention statistics (include scene id)
     stats_file = output_dir / f"{filename_stem}_attention_stats.txt"
     with open(stats_file, 'w') as f:
         f.write(f"Attention Statistics for {filename_stem}\n")
@@ -253,10 +304,11 @@ def create_attention_visualizations(model, feats, coords, args, results):
         f.write(f"  Max:  {attention_weights.max():.6f}\n")
         f.write(f"\nTop 10 most attended patches (coordinates):\n")
         top_indices = np.argsort(attention_weights)[::-1][:10]
-        coords_np = to_numpy_coords(coords[0])
         for i, idx in enumerate(top_indices):
-            f.write(f"  {i+1}. Patch at ({coords_np[idx][0]:.1f}, {coords_np[idx][1]:.1f}) "
-                   f"- Attention: {attention_weights[idx]:.6f}\n")
+            f.write(
+                f"  {i+1}. Scene {int(scn_ids[idx])} - Patch at ({coords_xy[idx][0]:.1f}, {coords_xy[idx][1]:.1f}) "
+                f"- Attention: {attention_weights[idx]:.6f}\n"
+            )
     
     extractor.cleanup()
     logger.info(f"Attention visualizations saved to: {output_dir}")
@@ -292,6 +344,94 @@ def create_coord_background(coordinates: np.ndarray, grid_size: tuple = (1024, 7
                 grid[y, x] = [100, 100, 100]  # Dark gray for patch positions
     
     return grid
+
+def _compute_scene_dims_from_coords(coords_xy_by_scene: dict, patch_size: int) -> dict:
+    """Compute per-scene (width,height) in the coordinate space from XY extents."""
+    scene_dims = {}
+    for scn_id, xy in coords_xy_by_scene.items():
+        if xy.size == 0:
+            scene_dims[scn_id] = (patch_size, patch_size)
+            continue
+        width = int(np.max(xy[:, 0])) + patch_size
+        height = int(np.max(xy[:, 1])) + patch_size
+        scene_dims[scn_id] = (width, height)
+    return scene_dims
+
+def _build_layout_offsets(scene_dims: dict, layout: str = 'horizontal', gap: int = 512) -> tuple:
+    """Return ordered scene ids, per-scene (x,y) offsets, and composite (W,H)."""
+    scene_ids = sorted(scene_dims.keys())
+    offsets = {}
+    if layout == 'vertical':
+        composite_w = max(scene_dims[s][0] for s in scene_ids) if scene_ids else 0
+        composite_h = 0
+        y_cursor = 0
+        for i, s in enumerate(scene_ids):
+            offsets[s] = (0, y_cursor)
+            composite_h += scene_dims[s][1]
+            if i < len(scene_ids) - 1:
+                composite_h += gap
+                y_cursor += scene_dims[s][1] + gap
+        return scene_ids, offsets, (composite_w, composite_h)
+    # horizontal
+    composite_h = max(scene_dims[s][1] for s in scene_ids) if scene_ids else 0
+    composite_w = 0
+    x_cursor = 0
+    for i, s in enumerate(scene_ids):
+        offsets[s] = (x_cursor, 0)
+        composite_w += scene_dims[s][0]
+        if i < len(scene_ids) - 1:
+            composite_w += gap
+            x_cursor += scene_dims[s][0] + gap
+    return scene_ids, offsets, (composite_w, composite_h)
+
+def _create_composite_attention_heatmap(
+    attention_weights: np.ndarray,
+    scn_ids: np.ndarray,
+    coordinates_xy: np.ndarray,
+    scene_dims: dict,
+    layout: str,
+    gap: int,
+    patch_size: int,
+    downsample_factor: int
+) -> tuple:
+    """Rasterize attention weights into a stitched multi-scene heatmap.
+    Returns (heatmap, global_coordinates_xy) where global coords include applied offsets.
+    """
+    scene_ids, offsets, (comp_w, comp_h) = _build_layout_offsets(scene_dims, layout=layout, gap=gap)
+    heatmap_w = max(1, comp_w // downsample_factor)
+    heatmap_h = max(1, comp_h // downsample_factor)
+    heatmap = np.zeros((heatmap_h, heatmap_w), dtype=np.float32)
+    counts = np.zeros((heatmap_h, heatmap_w), dtype=np.float32)
+
+    # Global coordinates with offsets (for optional background rendering)
+    global_xy = coordinates_xy.copy()
+    for s in scene_ids:
+        sx, sy = offsets[s]
+        mask = (scn_ids == s)
+        global_xy[mask, 0] += sx
+        global_xy[mask, 1] += sy
+
+    # Rasterize
+    patch_w = max(1, patch_size // downsample_factor)
+    patch_h = max(1, patch_size // downsample_factor)
+    for i in range(len(attention_weights)):
+        gx = int(np.floor(global_xy[i, 0] / downsample_factor))
+        gy = int(np.floor(global_xy[i, 1] / downsample_factor))
+        if gx >= heatmap_w or gy >= heatmap_h:
+            continue
+        gx_end = min(heatmap_w, gx + patch_w)
+        gy_end = min(heatmap_h, gy + patch_h)
+        if gx < gx_end and gy < gy_end:
+            heatmap[gy:gy_end, gx:gx_end] += float(attention_weights[i])
+            counts[gy:gy_end, gx:gx_end] += 1.0
+
+    mask = counts > 0
+    heatmap[mask] /= counts[mask]
+    hmin = float(heatmap.min())
+    hmax = float(heatmap.max())
+    if np.isfinite(hmin) and np.isfinite(hmax) and hmax > hmin:
+        heatmap = (heatmap - hmin) / (hmax - hmin)
+    return heatmap, global_xy, offsets, (comp_w, comp_h)
 
 def run_inference(model, feats, coords, device):
     """Run inference using the inference model's predict method"""

@@ -221,11 +221,11 @@ def main():
     
     # Create heatmaps for both attention types
     attention_heatmap = visualizer.create_attention_heatmap(
-        attention_weights, coordinates, slide_dims, downsample_factor=32
+        attention_weights, coordinates[:, 1:3], slide_dims, downsample_factor=32
     )
     
     combined_heatmap = visualizer.create_attention_heatmap(
-        combined_attention, coordinates, slide_dims, downsample_factor=32
+        combined_attention, coordinates[:, 1:3], slide_dims, downsample_factor=32
     )
     
     # Load or create background image
@@ -234,7 +234,7 @@ def main():
         background_image = load_slide_image(args.slide_image)
     else:
         print("Creating background image from patch coordinates...")
-        background_image = create_patch_grid_from_h5(args.h5_path, coordinates, 
+        background_image = create_patch_grid_from_h5(args.h5_path, coordinates[:, 1:3], 
                                                    grid_size=(1024, 768))
     
     # Create attention overlays
@@ -307,7 +307,7 @@ def main():
             dummy_patches.append(patch)
         
         fig3 = visualizer.create_patch_attention_grid(
-            dummy_patches, attention_weights, coordinates,
+            dummy_patches, attention_weights, coordinates[:, 1:3],
             grid_size=(8, 8),
             save_path=args.output_dir / f"{args.slide_name}_top_patches.png"
         )
@@ -331,7 +331,7 @@ def main():
         f.write(f"\nTop 10 most attended patches (coordinates):\n")
         top_indices = np.argsort(attention_weights)[::-1][:10]
         for i, idx in enumerate(top_indices):
-            f.write(f"  {i+1}. Patch at ({coordinates[idx][0]}, {coordinates[idx][1]}) "
+            f.write(f"  {i+1}. Patch at ({coordinates[idx][1]}, {coordinates[idx][2]}) "
                    f"- Attention: {attention_weights[idx]:.6f}\n")
     
     # Cleanup
