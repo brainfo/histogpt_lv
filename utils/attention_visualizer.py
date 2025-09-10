@@ -16,10 +16,8 @@ import h5py
 
 
 def to_numpy_weights(tensor: torch.Tensor) -> np.ndarray:
-    """Convert attention-like floating tensors to numpy float16 on CPU."""
-    cpu_tensor = tensor.detach().cpu()
-    if cpu_tensor.dtype.is_floating_point:
-        cpu_tensor = cpu_tensor.half()
+    """Deprecated: kept for backward-compat. Prefer gradient-based saliency now."""
+    cpu_tensor = tensor.detach().cpu().float()
     return cpu_tensor.numpy()
 
 
@@ -32,90 +30,9 @@ def to_numpy_coords(tensor: torch.Tensor) -> np.ndarray:
 
 
 class AttentionExtractor:
-    """
-    Extracts attention weights from CancerClassifier model during forward pass.
-    """
-    
-    def __init__(self, model: nn.Module):
-        """
-        Initialize attention extractor.
-        
-        Args:
-            model: CancerClassifier model instance
-        """
-        self.model = model
-        self.attention_weights = None
-        self.gate_scores = None
-        self.features = None
-        self.hooks = []
-        self._register_hooks()
-    
-    def _register_hooks(self):
-        """Register forward hooks to capture attention weights."""
-        
-        def attention_hook(module, input, output):
-            # Capture attention weights from the forward pass
-            # This hook captures the attention_weights from line 97 in aggregator.py
-            if hasattr(self, '_temp_attention_weights'):
-                self.attention_weights = self._temp_attention_weights.detach().cpu().half()  # Ensure float16 on CPU
-        
-        def gate_hook(module, input, output):
-            # Capture gate scores
-            if hasattr(self, '_temp_gate_scores'):
-                self.gate_scores = self._temp_gate_scores.detach().cpu().half()  # Ensure float16 on CPU
-        
-        # We'll modify the forward pass to capture intermediate values
-        # Register hooks on the classifier layer to know when forward pass is complete
-        handle = self.model.classifier.register_forward_hook(attention_hook)
-        self.hooks.append(handle)
-    
-    def extract_attention(self, x: torch.Tensor, pos: torch.Tensor) -> Dict[str, torch.Tensor]:
-        """
-        Extract attention weights by running a modified forward pass.
-        
-        Args:
-            x: Input features tensor
-            pos: Position tensor
-            
-        Returns:
-            Dictionary containing attention weights, gate scores, and features
-        """
-        self.model.eval()
-        
-        with torch.no_grad():
-            # Use autocast for GPU operations (bfloat16 on GPU, float16 conversion on CPU)
-            device = next(self.model.parameters()).device
-            with torch.autocast(device_type='cuda' if device.type == 'cuda' else 'cpu', 
-                               dtype=torch.bfloat16 if device.type == 'cuda' else torch.float16):
-                # Run the forward pass up to attention computation
-                x_processed = [self.model.position(x[i], pos[i]) for i in range(len(x))]
-                x_processed = torch.stack(x_processed, dim=0)
-                features = self.model.model(x_processed)
-                features = self.model.norm(features)
-                
-                # Compute attention weights (matching aggregator.py lines 94-97)
-                attention_scores = torch.tanh(self.model.attention_V(features))
-                attention_scores = self.model.attention_w(attention_scores)
-                attention_weights = torch.softmax(attention_scores, dim=1)
-                
-                # Compute gate scores (matching aggregator.py lines 99-100)
-                gate_scores = torch.sigmoid(self.model.attention_U(features))
-            
-            # Store results (keep on GPU with native precision - convert to CPU only when needed for visualization)
-            results = {
-                'attention_weights': attention_weights.squeeze(-1),  # Remove last dimension (B, 640) - stay on GPU
-                'gate_scores': gate_scores,  # (B, 640, d_model) - stay on GPU  
-                'features': features,  # (B, 640, d_model) - stay on GPU
-                'combined_attention': (attention_weights.squeeze(-1) * gate_scores.mean(dim=-1))  # (B, 640) - stay on GPU
-            }
-            
-        return results
-    
-    def cleanup(self):
-        """Remove registered hooks."""
-        for hook in self.hooks:
-            hook.remove()
-        self.hooks = []
+    """Deprecated: latent attention extraction is not used for patch heatmaps."""
+    def __init__(self, *args, **kwargs):
+        raise RuntimeError("AttentionExtractor is deprecated. Use gradient-based saliency instead.")
 
 
 class GradientAttentionVisualizer:
