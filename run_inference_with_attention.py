@@ -18,9 +18,7 @@ from pathlib import Path
 from PIL import Image
 from models.aggregator import CancerClassifier
 from utils.attention_visualizer import (
-    AttentionExtractor,
     GradientAttentionVisualizer,
-    to_numpy_weights,
     to_numpy_coords
 )
 
@@ -172,52 +170,73 @@ def extract_diagnosis_from_filename(filename: str) -> str:
     return "unknown"
 
 def create_attention_visualizations(model, feats, coords, args, results):
-    """Create attention visualizations using the loaded model"""
-    logger.info("Creating attention visualizations...")
+    """Create per-patch gradient saliency visualizations using d(logit)/d(patch_feature)."""
+    logger.info("Creating gradient-based patch saliency...")
     
-    # Extract attention weights using the base model
-    # (Everything is already on the same device from main() - simple!)
-    extractor = AttentionExtractor(model.model)
+    # Prepare inputs
+    device = next(model.parameters()).device
+    x = feats[0].to(device)                # (N, d_input)
+    pos = coords[0].to(device)             # (N, 3) [scn, x, y]
+    x = x.float().detach().clone().requires_grad_(True)
     
-    # Use the real coordinates (not dummy ones!)
-    attention_data = extractor.extract_attention(feats, coords)
-    attention_weights = to_numpy_weights(attention_data['attention_weights'][0])
-    combined_attention = to_numpy_weights(attention_data['combined_attention'][0])
+    # Forward through position and encoder to get per-patch embeddings
+    model.model.eval()
+    with torch.enable_grad():
+        x_pos = model.model.position(x.unsqueeze(0), pos.unsqueeze(0))[0]  # (N, d_input)
+        features = model.model.model(x_pos.unsqueeze(0))[0]                # (N_latents, d_model) or (N, d_model) depending on arch
+        features = model.model.norm(features)
+        
+        # Aggregate with gated attention as during inference
+        attention_scores = torch.tanh(model.model.attention_V(features))
+        attention_scores = model.model.attention_w(attention_scores)
+        attention_weights = torch.softmax(attention_scores, dim=0).squeeze(-1)   # along token dim
+        gate_scores = torch.sigmoid(model.model.attention_U(features))
+        gated_features = gate_scores * features
+        aggregated = torch.sum(attention_weights.unsqueeze(-1) * gated_features, dim=0)
+        logits = model.model.classifier(aggregated.unsqueeze(0))
+        
+        # Target logit
+        target_idx = int(torch.argmax(logits, dim=1).item())
+        target_logit = logits[0, target_idx]
+        
+        # Backprop to input features
+        model.zero_grad(set_to_none=True)
+        if x.grad is not None:
+            x.grad.zero_()
+        target_logit.backward(retain_graph=False)
+        grads = x.grad.detach()  # (N, d_input)
     
-    logger.info(f"Attention weights - Mean: {attention_weights.mean():.4f}, "
-               f"Max: {attention_weights.max():.4f}, Min: {attention_weights.min():.4f}")
+    # Patch saliency scores (L2 norm of grads or grad*input)
+    saliency = torch.linalg.norm(grads, ord=2, dim=1)  # (N,)
+    saliency = saliency / (saliency.max() + 1e-12)
+    saliency_np = saliency.detach().cpu().float().numpy()
     
     # Initialize visualizer
     visualizer = GradientAttentionVisualizer(patch_size=args.patch_size)
     
     # Prepare coordinates and scene ids
     coords_np_full = to_numpy_coords(coords[0])  # shape: (N, 3) [scn, x, y]
-    scn_ids = coords_np_full[:, 0].astype(int)
-    coords_xy = coords_np_full[:, 1:3]
+    scn_ids_full = coords_np_full[:, 0].astype(int)
+    coords_xy_full = coords_np_full[:, 1:3]
+
+    # Align lengths (features/coords may be larger than saliency if trimmed earlier)
+    n = int(min(len(saliency_np), coords_xy_full.shape[0]))
+    saliency_n = saliency_np[:n]
+    coords_xy_n = coords_xy_full[:n]
+    scn_ids_n = scn_ids_full[:n]
 
     # Per-scene dims based on extents (approximate if original slide sizes unavailable)
-    coords_by_scene = {s: coords_xy[scn_ids == s] for s in np.unique(scn_ids)}
+    coords_by_scene = {s: coords_xy_n[scn_ids_n == s] for s in np.unique(scn_ids_n)}
     scene_dims = _compute_scene_dims_from_coords(coords_by_scene, patch_size=args.patch_size)
 
-    # Create stitched composite heatmaps across scenes with a gap
-    composite_attention, global_xy, offsets, composite_dims = _create_composite_attention_heatmap(
-        attention_weights,
-        scn_ids,
-        coords_xy,
+    # Create stitched composite heatmap across scenes with a gap using saliency
+    composite_attention, global_xy_n, offsets, composite_dims = _create_composite_attention_heatmap(
+        saliency_n,
+        scn_ids_n,
+        coords_xy_n,
         scene_dims,
         layout='horizontal',
         gap=args.patch_size,  # visual separation equal to one patch
-        patch_size=args.patch_size,
-        downsample_factor=args.downsample_factor
-    )
-
-    composite_combined, _, _, _ = _create_composite_attention_heatmap(
-        combined_attention,
-        scn_ids,
-        coords_xy,
-        scene_dims,
-        layout='horizontal',
-        gap=args.patch_size,
         patch_size=args.patch_size,
         downsample_factor=args.downsample_factor
     )
@@ -235,9 +254,9 @@ def create_attention_visualizations(model, feats, coords, args, results):
             background_image = np.ones((max(1, comp_h // args.downsample_factor), max(1, comp_w // args.downsample_factor), 3), dtype=np.uint8) * 240
     else:
         logger.info("Creating simple background from stitched coordinates...")
-        # Make a simple grid background from global xy
-        min_x, min_y = global_xy.min(axis=0)
-        max_x, max_y = global_xy.max(axis=0)
+        # Make a simple grid background from global xy (trimmed set)
+        min_x, min_y = global_xy_n.min(axis=0)
+        max_x, max_y = global_xy_n.max(axis=0)
         w = int(max_x - min_x) + args.patch_size
         h = int(max_y - min_y) + args.patch_size
         background_image = np.ones((max(1, h // args.downsample_factor), max(1, w // args.downsample_factor), 3), dtype=np.uint8) * 240
@@ -247,9 +266,7 @@ def create_attention_visualizations(model, feats, coords, args, results):
         background_image, composite_attention, alpha=0.6, colormap='jet'
     )
     
-    combined_overlay = visualizer.overlay_attention_on_image(
-        background_image, composite_combined, alpha=0.6, colormap='plasma'
-    )
+    combined_overlay = attention_overlay
     
     # Save visualizations
     output_dir = Path(args.output_dir)
@@ -259,15 +276,15 @@ def create_attention_visualizations(model, feats, coords, args, results):
     
     # Save comparison plots (stitched across scenes)
     fig1 = visualizer.plot_attention_comparison(
-        background_image, attention_overlay, attention_weights,
+        background_image, attention_overlay, saliency_n,
         title=f"Attention Analysis - {results['predicted_diagnosis']} (conf: {results['prediction_confidence']:.3f})",
         save_path=output_dir / f"{filename_stem}_attention_comparison.png"
     )
     
     fig2 = visualizer.plot_attention_comparison(
-        background_image, combined_overlay, combined_attention,
-        title=f"Combined Attention - {results['predicted_diagnosis']} (conf: {results['prediction_confidence']:.3f})",
-        save_path=output_dir / f"{filename_stem}_combined_attention.png"
+        background_image, combined_overlay, saliency_n,
+        title=f"Patch Saliency - {results['predicted_diagnosis']} (conf: {results['prediction_confidence']:.3f})",
+        save_path=output_dir / f"{filename_stem}_saliency.png"
     )
     
     # Save per-scene heatmaps additionally
@@ -275,7 +292,7 @@ def create_attention_visualizations(model, feats, coords, args, results):
         if xy.size == 0:
             continue
         scene_heatmap = visualizer.create_attention_heatmap(
-            attention_weights[scn_ids == s], xy, scene_dims[s], downsample_factor=args.downsample_factor
+            saliency_n[scn_ids_n == s], xy, scene_dims[s], downsample_factor=args.downsample_factor
         )
         scene_overlay = visualizer.overlay_attention_on_image(
             np.ones((max(1, scene_dims[s][1] // args.downsample_factor), max(1, scene_dims[s][0] // args.downsample_factor), 3), dtype=np.uint8) * 240,
@@ -289,33 +306,31 @@ def create_attention_visualizations(model, feats, coords, args, results):
         plt.savefig(output_dir / f"{filename_stem}_scene_{s}_attention.png", dpi=200, bbox_inches='tight')
         plt.close()
 
-    # Save attention statistics (include scene id)
+    # Save saliency statistics (include scene id)
     stats_file = output_dir / f"{filename_stem}_attention_stats.txt"
     with open(stats_file, 'w') as f:
-        f.write(f"Attention Statistics for {filename_stem}\n")
+        f.write(f"Gradient Saliency Statistics for {filename_stem}\n")
         f.write("=" * 50 + "\n")
         f.write(f"Prediction: {results['predicted_diagnosis']}\n")
         f.write(f"Confidence: {results['prediction_confidence']:.4f}\n")
-        f.write(f"Number of patches: {len(attention_weights)}\n")
-        f.write(f"Attention weights:\n")
-        f.write(f"  Mean: {attention_weights.mean():.6f}\n")
-        f.write(f"  Std:  {attention_weights.std():.6f}\n")
-        f.write(f"  Min:  {attention_weights.min():.6f}\n")
-        f.write(f"  Max:  {attention_weights.max():.6f}\n")
-        f.write(f"\nTop 10 most attended patches (coordinates):\n")
-        top_indices = np.argsort(attention_weights)[::-1][:10]
+        f.write(f"Number of patches: {len(saliency_n)}\n")
+        f.write(f"Saliency (normalized L2 grad norm):\n")
+        f.write(f"  Mean: {saliency_n.mean():.6f}\n")
+        f.write(f"  Std:  {saliency_n.std():.6f}\n")
+        f.write(f"  Min:  {saliency_n.min():.6f}\n")
+        f.write(f"  Max:  {saliency_n.max():.6f}\n")
+        f.write(f"\nTop 10 most salient patches (coordinates):\n")
+        top_indices = np.argsort(saliency_n)[::-1][:10]
         for i, idx in enumerate(top_indices):
             f.write(
-                f"  {i+1}. Scene {int(scn_ids[idx])} - Patch at ({coords_xy[idx][0]:.1f}, {coords_xy[idx][1]:.1f}) "
-                f"- Attention: {attention_weights[idx]:.6f}\n"
+                f"  {i+1}. Scene {int(scn_ids_n[idx])} - Pos ({coords_xy_n[idx][0]:.1f}, {coords_xy_n[idx][1]:.1f}) "
+                f"- Saliency: {saliency_n[idx]:.6f}\n"
             )
     
-    extractor.cleanup()
-    logger.info(f"Attention visualizations saved to: {output_dir}")
+    logger.info(f"Saliency visualizations saved to: {output_dir}")
     
     return {
-        'attention_weights': attention_weights,
-        'combined_attention': combined_attention,
+        'patch_saliency': saliency_n,
         'output_dir': output_dir
     }
 
@@ -545,15 +560,15 @@ def main():
             "device_used": str(device)
         }
         
-        # Create attention visualizations if not skipped
+        # Create saliency visualizations if not skipped
         if not args.skip_attention:
             if args.slide_image:
                 args.slide_image = Path(args.slide_image)
-            attention_results = create_attention_visualizations(model, feats, coords, args, results)
-            results['attention_analysis'] = {
-                'attention_mean': float(attention_results['attention_weights'].mean()),
-                'attention_max': float(attention_results['attention_weights'].max()),
-                'attention_std': float(attention_results['attention_weights'].std())
+            saliency_results = create_attention_visualizations(model, feats, coords, args, results)
+            results['saliency_analysis'] = {
+                'saliency_mean': float(np.mean(saliency_results['patch_saliency'])),
+                'saliency_max': float(np.max(saliency_results['patch_saliency'])),
+                'saliency_std': float(np.std(saliency_results['patch_saliency']))
             }
         
         # Save results
