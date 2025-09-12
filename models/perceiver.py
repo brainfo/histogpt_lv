@@ -10,9 +10,6 @@ from flash_perceiver import Perceiver
 
 
 class FlashPerceiver(nn.Module):
-    """
-    The Perceiver model with FlashAttention.
-    """
     def __init__(
         self,
         d_input: int = 512,
@@ -21,8 +18,7 @@ class FlashPerceiver(nn.Module):
         n_layers: int = 2,
         n_latents: int = 256,
         attn_drop: float = 0.0,
-        concat_latents: bool = True,
-        use_flash_attn: bool = True,
+        concat_latents: bool = True
     ):
         super().__init__()
         self.concat_latents = concat_latents
@@ -51,8 +47,7 @@ class FlashPerceiver(nn.Module):
             weight_tie_layers=False,
             gated_mlp=True,
             self_per_cross_attn=0 if concat_latents else 1,
-            num_zero_tokens=None,
-            use_flash_attn=use_flash_attn,
+            num_zero_tokens=None
         )
 
     def forward(self, x: torch.Tensor):

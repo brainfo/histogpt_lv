@@ -10,7 +10,7 @@ class OriginalAggregator(nn.Module):
     """
     Original aggregator structure - intact for loading pretrained weights
     """
-    def __init__(self, d_input, d_model, num_cls, use_flash_attn=True):
+    def __init__(self, d_input, d_model, num_cls):
         super().__init__()
         from .embedder import NaViTEmbedding
         self.position = NaViTEmbedding(
@@ -25,8 +25,7 @@ class OriginalAggregator(nn.Module):
             n_layers=6,
             n_latents=640,
             attn_drop=0.0,
-            concat_latents=True,
-            use_flash_attn=use_flash_attn,
+            concat_latents=True
         )
         self.norm = FusedRMSNorm(
             normalized_shape=d_model,
@@ -48,7 +47,7 @@ class CancerClassifier(nn.Module):
     """
     Cancer classifier - complete model for training
     """
-    def __init__(self, d_input, d_model, num_cls=2, use_flash_attn=True):
+    def __init__(self, d_input, d_model, num_cls=2):
         super().__init__()
         from .embedder import NaViTEmbedding
         # Position embedding
@@ -65,8 +64,7 @@ class CancerClassifier(nn.Module):
             n_layers=6,
             n_latents=640,
             attn_drop=0.0,
-            concat_latents=True,
-            use_flash_attn=use_flash_attn,
+            concat_latents=True
         )
         # Normalization
         self.norm = FusedRMSNorm(
