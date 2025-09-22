@@ -201,8 +201,12 @@ def run_cross_validation(feat_path: str, histogpt_weights_path: str,
     """Run k-fold cross-validation (offline only)"""
     logger.info(f"Starting offline cross-validation with {config['k_folds']} folds")
     
-    # Initialize dataset
-    dataset = MILDataset(feat_path, max_patches_per_slide=config['max_patches_per_slide'])
+    # Initialize dataset with deterministic subsampling using training seed
+    dataset = MILDataset(
+        feat_path,
+        max_patches_per_slide=config['max_patches_per_slide'],
+        seed=config['seed']
+    )
     
     # Get labels for stratification
     labels = np.array(dataset.label_list)

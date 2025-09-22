@@ -13,6 +13,8 @@ import argparse
 import logging
 import json
 import time
+import random
+from typing import Optional
 from pathlib import Path
 from models.aggregator import CancerClassifier
 
@@ -26,8 +28,34 @@ def setup_offline_environment():
     os.environ["HF_DATASETS_OFFLINE"] = "1"
     os.environ["HF_HUB_OFFLINE"] = "1"
 
-def load_h5_data(h5_path: str, max_patches: int = 1000):
-    """Load features and coordinates from H5 file"""
+def set_global_seed(seed: int) -> None:
+    """Set RNG seeds for Python, NumPy, and Torch for reproducibility.
+
+    Note: Primary goal is deterministic patch subsampling; full determinism
+    is not guaranteed across all backends.
+    """
+    try:
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+        # Optional: encourage deterministic behavior where possible
+        if hasattr(torch.backends, 'cudnn'):
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
+    except Exception as e:
+        logger.warning(f"Failed to fully set global seeds: {e}")
+
+def load_h5_data(h5_path: str, max_patches: int = 1000, seed: Optional[int] = None):
+    """Load features and coordinates from H5 file.
+
+    Args:
+        h5_path: Path to the H5 file containing 'features' and 'coordinates'.
+        max_patches: Maximum number of patches to keep. If the file contains
+            more patches than this value, a random subset is selected.
+        seed: Optional random seed for deterministic patch subsampling.
+    """
     logger.info(f"Loading data from: {h5_path}")
     
     with h5py.File(h5_path, 'r') as file:
@@ -37,7 +65,11 @@ def load_h5_data(h5_path: str, max_patches: int = 1000):
         # Apply patch limiting if needed
         if len(feats) > max_patches:
             logger.info(f"Limiting patches from {len(feats)} to {max_patches}")
-            indices = np.random.choice(len(feats), max_patches, replace=False)
+            if seed is not None:
+                rng = np.random.default_rng(seed)
+                indices = rng.choice(len(feats), max_patches, replace=False)
+            else:
+                indices = np.random.choice(len(feats), max_patches, replace=False)
             indices = np.sort(indices)
             feats = feats[indices]
             coords = coords[indices]
@@ -179,6 +211,8 @@ def main():
                         help='Path to H5 file for inference')
     parser.add_argument('--max_patches', type=int, default=1000,
                         help='Maximum patches to use for inference')
+    parser.add_argument('--seed', type=int, default=None,
+                        help='Random seed for deterministic patch subsampling')
     parser.add_argument('--device', type=str, default='auto',
                         help='Device to use (auto, cpu, cuda)')
     parser.add_argument('--output_file', type=str, default=None,
@@ -191,6 +225,11 @@ def main():
     # Setup offline environment
     setup_offline_environment()
     
+    # Seed RNGs if requested
+    if args.seed is not None:
+        logger.info(f"Setting random seed: {args.seed}")
+        set_global_seed(args.seed)
+
     # Determine device
     if args.device == 'auto':
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -208,8 +247,8 @@ def main():
         sys.exit(1)
     
     try:
-        # Load data
-        feats, coords = load_h5_data(args.h5_file, args.max_patches)
+        # Load data (with deterministic subsampling if seed provided)
+        feats, coords = load_h5_data(args.h5_file, args.max_patches, seed=args.seed)
         
         # Load model
         model = load_inference_model(args.model)

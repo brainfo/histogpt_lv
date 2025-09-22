@@ -5,6 +5,7 @@ import numpy as np
 import json
 # import pickle  # No longer needed
 import logging
+import hashlib
 from torch.utils.data import Dataset
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Union
@@ -26,7 +27,7 @@ class MILDataset(Dataset):
     coords: coordinate vectors
     label: disease encodings (extracted from filename)
     """
-    def __init__(self, feat_path: str, transform=None, max_patches_per_slide: int = 1000, use_cache: bool = True):
+    def __init__(self, feat_path: str, transform=None, max_patches_per_slide: int = 1000, use_cache: bool = True, seed: Optional[int] = None):
         """
         Initialize with feat_path, transform, and patch limiting
         Labels are extracted from filenames
@@ -34,6 +35,9 @@ class MILDataset(Dataset):
         self.transform = transform
         self.feat_path = Path(feat_path)
         self.max_patches_per_slide = max_patches_per_slide
+        self.seed = seed
+        # Cache deterministic subsample indices per file to keep them stable across epochs
+        self._subsample_indices_cache: Dict[str, np.ndarray] = {}
         
         # Disease patterns for label extraction
         self.disease_patterns = {
@@ -151,12 +155,24 @@ class MILDataset(Dataset):
                     
                     # Apply patch limiting if needed
                     if len(feats) > self.max_patches_per_slide:
-                        indices = np.random.choice(
-                            len(feats), 
-                            self.max_patches_per_slide, 
-                            replace=False
-                        )
-                        indices = np.sort(indices)
+                        # Deterministic subsampling if seed provided; otherwise use global RNG
+                        if self.seed is not None:
+                            # Build a stable per-file seed by mixing dataset seed with filename hash
+                            file_hash = int(hashlib.sha256(filename.encode('utf-8')).hexdigest()[:16], 16) % (2**32)
+                            combined_seed = (int(self.seed) + file_hash) % (2**32 - 1)
+                            # Cache per-file indices to keep them constant across epochs
+                            if filename not in self._subsample_indices_cache:
+                                rng = np.random.default_rng(combined_seed)
+                                chosen = rng.choice(len(feats), self.max_patches_per_slide, replace=False)
+                                self._subsample_indices_cache[filename] = np.sort(chosen)
+                            indices = self._subsample_indices_cache[filename]
+                        else:
+                            indices = np.random.choice(
+                                len(feats),
+                                self.max_patches_per_slide,
+                                replace=False
+                            )
+                            indices = np.sort(indices)
                         feats = feats[indices]
                         coords = coords[indices]
                     

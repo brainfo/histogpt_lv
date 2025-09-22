@@ -40,6 +40,7 @@ run_inference_with_attention.py
 attention_outputs/
 inference_*
 thumbnails/
+results/
 
 # IDE
 .vscode/
