@@ -1,0 +1,22 @@
+Gradient Saliency Statistics for 6371_22_PEK-G3_4-119
+==================================================
+Prediction: basal cell carcinoma
+Confidence: 0.9414
+Number of patches: 1000
+Saliency (normalized L2 grad norm):
+  Mean: 0.023083
+  Std:  0.089963
+  Min:  0.000025
+  Max:  1.000000
+
+Top 10 most salient patches (coordinates):
+  1. Scene 0 - Pos (33280.0, 9216.0) - Saliency: 1.000000
+  2. Scene 0 - Pos (31232.0, 10240.0) - Saliency: 0.920867
+  3. Scene 0 - Pos (6144.0, 16896.0) - Saliency: 0.915372
+  4. Scene 0 - Pos (75776.0, 13824.0) - Saliency: 0.872466
+  5. Scene 0 - Pos (32256.0, 9728.0) - Saliency: 0.793258
+  6. Scene 0 - Pos (10752.0, 19968.0) - Saliency: 0.711283
+  7. Scene 0 - Pos (84480.0, 22528.0) - Saliency: 0.581971
+  8. Scene 0 - Pos (75264.0, 9728.0) - Saliency: 0.536348
+  9. Scene 0 - Pos (11776.0, 11776.0) - Saliency: 0.489833
+  10. Scene 0 - Pos (6144.0, 22528.0) - Saliency: 0.477012

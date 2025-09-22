@@ -33,6 +33,9 @@ MANIFEST
 *.h5
 *.hdf5
 
+# Attributes
+run_inference_with_attention.py
+
 # Output directories
 attention_outputs/
 inference_*
