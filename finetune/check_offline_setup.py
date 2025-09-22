@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Check if the environment is ready for offline MIL training
-Verifies all required models and data are available locally
-"""
 
 import os
 import sys

@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Single inference example using the exported inference model
-Loads a self-contained inference model and runs inference on a single H5 file
-"""
-
 import os
 import sys
 import torch

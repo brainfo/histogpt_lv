@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Training script for MIL cancer classifier with pretrained HistoGPT weights
-STRICTLY OFFLINE - No runtime downloads
-"""
-
 import os
 import sys
 import numpy as np
