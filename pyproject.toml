@@ -1,0 +1,25 @@
+[project]
+name = "histogpt-le"
+version = "0.1.0"
+description = "Run evaluations with HistoGPT"
+readme = "README.md"
+
+requires-python = "~=3.11.0"
+dependencies = ["torch~=2.2.0",
+"torchvision~=0.17.2",
+"h5py~=3.14.0",
+"numpy~=1.26.0",
+"pytorch-lightning~=2.5.1",
+"torchmetrics~=1.0.3",
+"transformers~=4.37.2",
+"einops~=0.7.0",
+"flash-attn"]
+
+[tool.uv]
+package = false
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }, "wheel", "packaging"]
+
+[tool.uv.extra-build-variables]
+flash-attn = { FLASH_ATTENTION_SKIP_CUDA_BUILD = "TRUE" }

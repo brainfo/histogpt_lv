@@ -8,12 +8,17 @@ This repo is for Anne Petzold's project. The pre-trained model was from [HistoGP
 
 ### Setup
 
-```bash
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 
-pip install git+https://github.com/lucidrains/flash-perceiver-pytorch.git
-```
+- gcc v11.3
+- cuda 11.8
 
-Tested with Python 3.10 PyTorch 2.2.2 + CUDA 11.8
+```bash
+uv sync https://download.pytorch.org/whl/cu118 ## this includes flash_attn
+## apex, outside pyproject.toml parent folder
+uv pip install --no-build-isolation \
+  git+https://github.com/NVIDIA/apex.git@master \
+  --config-settings=--build-option=--cpp_ext \
+  --config-settings=--build-option=--cuda_ext
+```
 
 ### `run_best_model`
 - Loads the [`.pth`](https://drive.google.com/file/d/136LGjBabMBJ0Q3mMuEtv_ZIPQiisDSBU/view?usp=drive_link), reconstructs `CancerClassifier` from `architecture_config`, wraps it in an `InferenceModel` that disables training features and sets eval.
